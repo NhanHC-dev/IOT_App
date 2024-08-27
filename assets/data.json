@@ -1,0 +1,253 @@
+[
+    {
+      "name": "20/08/2024 00:00:00",
+      "temperature": 68,
+      "humidity": 55
+    },
+    {
+      "name": "20/08/2024 00:05:00",
+      "temperature": 70,
+      "humidity": 56
+    },
+    {
+      "name": "20/08/2024 00:10:00",
+      "temperature": 65,
+      "humidity": 54
+    },
+    {
+      "name": "20/08/2024 00:15:00",
+      "temperature": 72,
+      "humidity": 60
+    },
+    {
+      "name": "20/08/2024 00:20:00",
+      "temperature": 66,
+      "humidity": 52
+    },
+    {
+      "name": "21/08/2024 00:00:00",
+      "temperature": 67,
+      "humidity": 53
+    },
+    {
+      "name": "21/08/2024 00:05:00",
+      "temperature": 69,
+      "humidity": 54
+    },
+    {
+      "name": "21/08/2024 00:10:00",
+      "temperature": 71,
+      "humidity": 57
+    },
+    {
+      "name": "21/08/2024 00:15:00",
+      "temperature": 64,
+      "humidity": 50
+    },
+    {
+      "name": "21/08/2024 00:20:00",
+      "temperature": 73,
+      "humidity": 58
+    },
+    {
+      "name": "22/08/2024 00:00:00",
+      "temperature": 66,
+      "humidity": 52
+    },
+    {
+      "name": "22/08/2024 00:05:00",
+      "temperature": 68,
+      "humidity": 55
+    },
+    {
+      "name": "22/08/2024 00:10:00",
+      "temperature": 70,
+      "humidity": 56
+    },
+    {
+      "name": "22/08/2024 00:15:00",
+      "temperature": 71,
+      "humidity": 58
+    },
+    {
+      "name": "22/08/2024 00:20:00",
+      "temperature": 69,
+      "humidity": 54
+    },
+    {
+      "name": "23/08/2024 00:00:00",
+      "temperature": 72,
+      "humidity": 60
+    },
+    {
+      "name": "23/08/2024 00:05:00",
+      "temperature": 74,
+      "humidity": 61
+    },
+    {
+      "name": "23/08/2024 00:10:00",
+      "temperature": 71,
+      "humidity": 57
+    },
+    {
+      "name": "23/08/2024 00:15:00",
+      "temperature": 70,
+      "humidity": 56
+    },
+    {
+      "name": "23/08/2024 00:20:00",
+      "temperature": 68,
+      "humidity": 55
+    },
+    {
+      "name": "24/08/2024 00:00:00",
+      "temperature": 65,
+      "humidity": 54
+    },
+    {
+      "name": "24/08/2024 00:05:00",
+      "temperature": 67,
+      "humidity": 53
+    },
+    {
+      "name": "24/08/2024 00:10:00",
+      "temperature": 72,
+      "humidity": 60
+    },
+    {
+      "name": "24/08/2024 00:15:00",
+      "temperature": 74,
+      "humidity": 61
+    },
+    {
+      "name": "24/08/2024 00:20:00",
+      "temperature": 71,
+      "humidity": 57
+    },
+    {
+      "name": "25/08/2024 00:00:00",
+      "temperature": 70,
+      "humidity": 56
+    },
+    {
+      "name": "25/08/2024 00:05:00",
+      "temperature": 68,
+      "humidity": 55
+    },
+    {
+      "name": "25/08/2024 00:10:00",
+      "temperature": 66,
+      "humidity": 52
+    },
+    {
+      "name": "25/08/2024 00:15:00",
+      "temperature": 71,
+      "humidity": 58
+    },
+    {
+      "name": "25/08/2024 00:20:00",
+      "temperature": 73,
+      "humidity": 59
+    },
+    {
+      "name": "26/08/2024 00:00:00",
+      "temperature": 67,
+      "humidity": 53
+    },
+    {
+      "name": "26/08/2024 00:05:00",
+      "temperature": 69,
+      "humidity": 54
+    },
+    {
+      "name": "26/08/2024 00:10:00",
+      "temperature": 70,
+      "humidity": 56
+    },
+    {
+      "name": "26/08/2024 00:15:00",
+      "temperature": 72,
+      "humidity": 60
+    },
+    {
+      "name": "26/08/2024 00:20:00",
+      "temperature": 74,
+      "humidity": 61
+    },
+    {
+      "name": "27/08/2024 00:00:00",
+      "temperature": 71,
+      "humidity": 57
+    },
+    {
+      "name": "27/08/2024 00:05:00",
+      "temperature": 68,
+      "humidity": 55
+    },
+    {
+      "name": "27/08/2024 00:10:00",
+      "temperature": 66,
+      "humidity": 52
+    },
+    {
+      "name": "27/08/2024 00:15:00",
+      "temperature": 73,
+      "humidity": 59
+    },
+    {
+      "name": "27/08/2024 00:20:00",
+      "temperature": 75,
+      "humidity": 63
+    },
+    {
+      "name": "28/08/2024 00:00:00",
+      "temperature": 70,
+      "humidity": 56
+    },
+    {
+      "name": "28/08/2024 00:05:00",
+      "temperature": 72,
+      "humidity": 60
+    },
+    {
+      "name": "28/08/2024 00:10:00",
+      "temperature": 74,
+      "humidity": 61
+    },
+    {
+      "name": "28/08/2024 00:15:00",
+      "temperature": 71,
+      "humidity": 57
+    },
+    {
+      "name": "28/08/2024 00:20:00",
+      "temperature": 69,
+      "humidity": 54
+    },
+    {
+      "name": "29/08/2024 00:00:00",
+      "temperature": 66,
+      "humidity": 52
+    },
+    {
+      "name": "29/08/2024 00:05:00",
+      "temperature": 67,
+      "humidity": 53
+    },
+    {
+      "name": "29/08/2024 00:10:00",
+      "temperature": 70,
+      "humidity": 56
+    },
+    {
+      "name": "29/08/2024 00:15:00",
+      "temperature": 72,
+      "humidity": 60
+    },
+    {
+      "name": "29/08/2024 00:20:00",
+      "temperature": 74,
+      "humidity": 61
+    }
+  ]
+  
