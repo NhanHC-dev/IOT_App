@@ -84,7 +84,7 @@ class _MainDrawerState extends State<MainDrawer> {
           ListTile(
             textColor: Colors.white,
             iconColor: Colors.white,
-            leading: Icon(Icons.settings),
+            leading: Icon(Icons.thermostat),
             title: Text('Temperatures'),
             onTap: () {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>(TemperatureTable())));
@@ -102,7 +102,7 @@ class _MainDrawerState extends State<MainDrawer> {
           ListTile(
             textColor: Colors.white,
             iconColor: Colors.white,
-            leading: Icon(Icons.contacts),
+            leading: Icon(Icons.water_drop),
             title: Text('Moisture'),
             onTap: () {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>(MoistureTable())));

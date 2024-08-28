@@ -99,6 +99,9 @@ class _DashboardState extends State<Dashboard> {
 
   Widget GeneralCard({
     IconData icon = Icons.home,
+    IconData icon_water = Icons.water_drop,
+    IconData icon_thermometer = Icons.thermostat,
+    
     required double width,
     required double height,
     required String average,
@@ -122,7 +125,7 @@ class _DashboardState extends State<Dashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
-                  icon,
+                  icon_thermometer,
                   color: tertiaryColor,
                   size: 28,
                 ),
