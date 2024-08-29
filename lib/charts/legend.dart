@@ -15,7 +15,7 @@ class Legend extends StatelessWidget {
           SizedBox(width: 16),
           LegendItem(color: color, text: title),
           SizedBox(width: 16),
-          LegendItem(color: Colors.greenAccent, text: 'Minimum'),
+          LegendItem(color: Color.fromARGB(255, 81, 91, 193), text: 'Minimum'),
         ],
       ),
     );

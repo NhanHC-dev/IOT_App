@@ -134,7 +134,7 @@ class _DashboardState extends State<Dashboard> {
             Text(
               average.toString(),
               style: TextStyle(
-                color: tertiaryColor,
+                color: Colors.white,
                 fontSize: 24.0,
               ),
             ),
@@ -151,7 +151,7 @@ class _DashboardState extends State<Dashboard> {
                 value: percentage * 0.01,
                 strokeWidth: 8.0,
                 color: color,
-                backgroundColor: color.withOpacity(0.3)
+                backgroundColor: Color.fromARGB(255, 81, 91, 193).withOpacity(0.6)
               ),
             ),
             Text(
@@ -223,7 +223,7 @@ class _DashboardState extends State<Dashboard> {
                   label: "Temperature",
                   average: avgTemp.toString() + "°C",
                   percentage: 91,
-                  color: Colors.lightBlue
+                  color: tertiaryColor
                 ),
               ),
               GestureDetector(
@@ -239,7 +239,7 @@ class _DashboardState extends State<Dashboard> {
                   label: "Humidity",
                   average: avgHum.toString() + "%",
                   percentage: 67,
-                  color: Colors.pinkAccent
+                  color: tertiaryColor
                 ),
               ),
               GestureDetector(
@@ -255,7 +255,7 @@ class _DashboardState extends State<Dashboard> {
                   label: "Moisture",
                   average: avgMois.toString() + "%",
                   percentage: 34,
-                  color: Colors.yellowAccent
+                  color: tertiaryColor
                 ),
               ),
             ],

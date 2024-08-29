@@ -139,7 +139,7 @@ class _TempChartState extends State<TempChart> {
                       LineChartBarData(
                         spots: generateMinSpots(),
                         isCurved: false,
-                        color: Colors.greenAccent,
+                        color: Color.fromARGB(255, 81, 91, 193),
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -147,7 +147,7 @@ class _TempChartState extends State<TempChart> {
                       LineChartBarData(
                         spots: generateSpots(),
                         isCurved: false,
-                        color: Colors.lightBlue,
+                        color: tertiaryColor,
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -167,7 +167,7 @@ class _TempChartState extends State<TempChart> {
                   ),
                 ),
               ),
-              Legend(title: "Temperature",color: Colors.lightBlue,)
+              Legend(title: "Temperature",color: tertiaryColor,)
             ],
           ),
         ),

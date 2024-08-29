@@ -86,8 +86,8 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
           ),
           ListTile(
-            textColor: Colors.lightBlue,
-            iconColor: Colors.lightBlue,
+            textColor: tertiaryColor,
+            iconColor: tertiaryColor,
             leading: Icon(Icons.thermostat),
             title: Text('Temperatures'),
             onTap: () {
@@ -95,8 +95,8 @@ class _MainDrawerState extends State<MainDrawer> {
             },
           ),
           ListTile(
-            textColor: Colors.pinkAccent,
-            iconColor: Colors.pinkAccent,
+            textColor: tertiaryColor,
+            iconColor: tertiaryColor,
             leading: Icon(Icons.water_drop_outlined),
             title: Text('Humidity'),
             onTap: () {
@@ -104,8 +104,8 @@ class _MainDrawerState extends State<MainDrawer> {
             },
           ),
           ListTile(
-            textColor: Colors.yellowAccent,
-            iconColor: Colors.yellowAccent,
+            textColor: tertiaryColor,
+            iconColor: tertiaryColor,
             leading: Icon(Icons.opacity),
             title: Text('Moisture'),
             onTap: () {
@@ -122,8 +122,8 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
           ),
           ListTile(
-            textColor: Colors.white70,
-            iconColor: Colors.white70,
+            textColor: tertiaryColor,
+            iconColor: tertiaryColor,
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () {

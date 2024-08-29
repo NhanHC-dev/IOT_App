@@ -133,7 +133,7 @@ class _MoistureChartState extends State<MoistureChart> {
                       LineChartBarData(
                         spots:generateSpots(),
                         isCurved: true,
-                        color: Colors.yellowAccent,
+                        color: tertiaryColor,
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -141,7 +141,7 @@ class _MoistureChartState extends State<MoistureChart> {
                       LineChartBarData(
                         spots: generateMinSpots(),
                         isCurved: false,
-                        color: Colors.greenAccent,
+                        color: Color.fromARGB(255, 81, 91, 193),
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -169,7 +169,7 @@ class _MoistureChartState extends State<MoistureChart> {
                   ),
                 ),
               ),
-              Legend(title: "Moisture",color: Colors.yellowAccent,)
+              Legend(title: "Moisture",color: tertiaryColor,)
             ],
           ),
         ),
