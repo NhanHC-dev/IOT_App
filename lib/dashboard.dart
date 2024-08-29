@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:iot_app/appbar.dart';
 import 'package:iot_app/charts/humidity_chart.dart';
 import 'package:iot_app/charts/moisture_chart.dart';
 import 'package:iot_app/charts/temp_chart.dart';
-import 'package:iot_app/dashboard.dart';
-import 'package:iot_app/datalogtable/temparature_table.dart';
 import 'package:iot_app/drawer.dart';
 
 class Dashboard extends StatefulWidget {
@@ -101,12 +100,12 @@ class _DashboardState extends State<Dashboard> {
     required String average,
     required String label,
     required double percentage,
-    required Color color,
+    required ThemeData theme
   }) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: secondaryColor,
+        color: theme.cardColor,
       ),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -120,21 +119,21 @@ class _DashboardState extends State<Dashboard> {
             Text(
               label,
               style: TextStyle(
-                  color: color,
+                  color: theme.colorScheme.secondary,
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16.0),
             Icon(
               icon,
-              color: color,
+              color: theme.colorScheme.secondary,
               size:42,
             ),
             SizedBox(height: 16.0),
             Text(
               average.toString(),
               style: TextStyle(
-                color: Colors.white,
+                color: theme.colorScheme.onPrimary,
                 fontSize: 24.0,
               ),
             ),
@@ -150,14 +149,14 @@ class _DashboardState extends State<Dashboard> {
               child: CircularProgressIndicator(
                 value: percentage * 0.01,
                 strokeWidth: 8.0,
-                color: color,
+                color: theme.colorScheme.secondary,
                 backgroundColor: Color.fromARGB(255, 81, 91, 193).withOpacity(0.6)
               ),
             ),
             Text(
               '${percentage}%', // Display the percentage value
               style: TextStyle(
-                color: color,
+                color: theme.colorScheme.secondary,
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -170,21 +169,14 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     var screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       drawer: MainDrawer(),
-      appBar: AppBar(
-        foregroundColor: Colors.white,
-        backgroundColor: primaryColor,
-        actions: [
-          Icon(Icons.dark_mode_outlined),
-          SizedBox(width: 24,),
-          Icon(Icons.notifications_none_outlined),
-          SizedBox(width: 18,)
-        ],
-      ),
+      appBar: MainAppBar(),
       body: SafeArea(
         child: Transform.translate(
           offset: Offset(0, -10),
@@ -193,19 +185,18 @@ class _DashboardState extends State<Dashboard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.only(left: 20,right: 20, bottom: 8),
+                padding: EdgeInsets.only(left: 20, right: 20, bottom: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text("IoT System",
-                      style: TextStyle(color: Colors.white, fontSize: 36),
+                    SizedBox(height: 16),
+                    Text(
+                      "IoT System",
+                      style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 36),
                     ),
                     Text(
                       "Welcome to your Weed Garden",
-                      style: TextStyle(color: tertiaryColor, fontSize: 14),
+                      style: TextStyle(color: theme.colorScheme.secondary, fontSize: 14),
                     ),
                   ],
                 ),
@@ -223,7 +214,7 @@ class _DashboardState extends State<Dashboard> {
                   label: "Temperature",
                   average: avgTemp.toString() + "°C",
                   percentage: 91,
-                  color: tertiaryColor
+                  theme: theme
                 ),
               ),
               GestureDetector(
@@ -239,7 +230,7 @@ class _DashboardState extends State<Dashboard> {
                   label: "Humidity",
                   average: avgHum.toString() + "%",
                   percentage: 67,
-                  color: tertiaryColor
+                  theme: theme
                 ),
               ),
               GestureDetector(
@@ -255,7 +246,7 @@ class _DashboardState extends State<Dashboard> {
                   label: "Moisture",
                   average: avgMois.toString() + "%",
                   percentage: 34,
-                  color: tertiaryColor
+                  theme: theme
                 ),
               ),
             ],

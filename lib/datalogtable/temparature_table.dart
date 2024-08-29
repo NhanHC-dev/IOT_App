@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iot_app/appbar.dart';
 import 'package:iot_app/drawer.dart';
 
 class TemperatureTable extends StatefulWidget {
@@ -9,10 +10,6 @@ class TemperatureTable extends StatefulWidget {
 }
 
 class _TemperatureTableState extends State<TemperatureTable> {
-  Color primaryColor = Color.fromARGB(255, 21, 28, 47);
-  Color secondaryColor = Color.fromARGB(255, 32, 50, 77);
-  Color tertiaryColor = Color.fromARGB(255, 37, 213, 179);
-
   late List<Map<String, dynamic>> data = [
     {
       "id": 1,
@@ -60,89 +57,113 @@ class _TemperatureTableState extends State<TemperatureTable> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-        backgroundColor: primaryColor,
-        drawer: MainDrawer(),
-        appBar: AppBar(
-          backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
-          title: Text(
-            "Temperature",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        body: ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: Card(
-                  color: secondaryColor,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          flex: 7, // 3 parts for the first column
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                data[index]["sensorName"],
-                                style: TextStyle(
-                                  color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
-                              Text(
-                                data[index]["location"],
-                                style: TextStyle(
-                                  color: Colors.white.withOpacity(0.6),
-                                  fontSize: 14,
-                                ),
-                              ),
-                              SizedBox(height: 12),
-                              Text(
-                                data[index]["dateTime"],
-                                style: TextStyle(
-                                  color: tertiaryColor,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2, // 2 parts for the second column
-                          child: Transform.translate(
-                            offset: Offset(-10, 0),
+      backgroundColor: theme.primaryColor,
+      drawer: MainDrawer(),
+      appBar: MainAppBar(),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left:8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Temperature",
+                    style: TextStyle(
+                        color: theme.colorScheme.onPrimary,
+                        fontSize: 36
+                    ),
+                  ),
+                  Text(
+                    "List of temperature information",
+                    style: TextStyle(
+                        color: theme.colorScheme.secondary,
+                        fontSize: 14
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 16,),
+            Expanded(
+              child: ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    color: theme.cardColor,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            flex: 7,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  Icons.thermostat,
-                                  color: tertiaryColor,
-                                  size: 40,
+                                Text(
+                                  data[index]["sensorName"],
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onPrimary,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 Text(
-                                  data[index]["temperature"]+"°C",
+                                  data[index]["location"],
                                   style: TextStyle(
-                                      fontSize: 18,
-                                      color: tertiaryColor
+                                    color: theme.colorScheme.onPrimary.withOpacity(0.6),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                SizedBox(height: 12),
+                                Text(
+                                  data[index]["dateTime"],
+                                  style: TextStyle(
+                                    color: theme.colorScheme.secondary,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                          Flexible(
+                            flex: 2,
+                            child: Transform.translate(
+                              offset: Offset(-10, 0),
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.thermostat,
+                                    color: theme.colorScheme.secondary,
+                                    size: 40,
+                                  ),
+                                  Text(
+                                    data[index]["temperature"] + "°C",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: theme.colorScheme.secondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              );
-            }
-        )
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

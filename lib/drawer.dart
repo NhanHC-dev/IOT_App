@@ -6,23 +6,13 @@ import 'package:iot_app/settings.dart';
 
 import 'datalogtable/temparature_table.dart';
 
-class MainDrawer extends StatefulWidget {
-  const MainDrawer({super.key});
-
-  @override
-  State<MainDrawer> createState() => _MainDrawerState();
-}
-
-class _MainDrawerState extends State<MainDrawer> {
-
-  Color primaryColor = Color.fromARGB(255, 21, 28, 47);
-  Color secondaryColor = Color.fromARGB(255, 32, 50, 77);
-  Color tertiaryColor = Color.fromARGB(255, 37, 213, 179);
-
+class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Drawer(
-      backgroundColor: primaryColor,
+      backgroundColor: theme.primaryColor,
       width: 200,
       child: ListView(
         children: [
@@ -31,11 +21,11 @@ class _MainDrawerState extends State<MainDrawer> {
               Text(
                 'IoT Portal',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: theme.colorScheme.onPrimary,
                   fontSize: 24,
                 ),
               ),
-              SizedBox(height: 8,),
+              SizedBox(height: 8),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,21 +34,21 @@ class _MainDrawerState extends State<MainDrawer> {
                     "assets/iot.webp",
                     scale: 2.5,
                   ),
-                  SizedBox(height: 8,),
+                  SizedBox(height: 8),
                   Text(
                     "Quy Do",
                     style: TextStyle(
                       fontSize: 28,
-                      color: Colors.white,
+                      color: theme.colorScheme.onPrimary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8,),
+                  SizedBox(height: 8),
                   Text(
                     "Administrator",
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white54,
+                      color: theme.colorScheme.secondary.withOpacity(0.7),
                       fontWeight: FontWeight.bold,
                     ),
                   )
@@ -66,14 +56,14 @@ class _MainDrawerState extends State<MainDrawer> {
               )
             ],
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
           ListTile(
-            textColor: tertiaryColor,
-            iconColor: tertiaryColor,
+            textColor: theme.colorScheme.onPrimary,
+            iconColor: theme.colorScheme.onPrimary,
             leading: Icon(Icons.home),
             title: Text('Dashboard'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>(Dashboard())));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()));
             },
           ),
           Padding(
@@ -81,35 +71,35 @@ class _MainDrawerState extends State<MainDrawer> {
             child: Text(
               "Data",
               style: TextStyle(
-                color: Colors.white,
+                color: theme.colorScheme.onPrimary,
               ),
             ),
           ),
           ListTile(
-            textColor: tertiaryColor,
-            iconColor: tertiaryColor,
+            textColor: theme.colorScheme.onPrimary,
+            iconColor: theme.colorScheme.onPrimary,
             leading: Icon(Icons.thermostat),
             title: Text('Temperatures'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>(TemperatureTable())));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TemperatureTable()));
             },
           ),
           ListTile(
-            textColor: tertiaryColor,
-            iconColor: tertiaryColor,
+            textColor: theme.colorScheme.onPrimary,
+            iconColor: theme.colorScheme.onPrimary,
             leading: Icon(Icons.water_drop_outlined),
             title: Text('Humidity'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>(HumidityTable())));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HumidityTable()));
             },
           ),
           ListTile(
-            textColor: tertiaryColor,
-            iconColor: tertiaryColor,
+            textColor: theme.colorScheme.onPrimary,
+            iconColor: theme.colorScheme.onPrimary,
             leading: Icon(Icons.opacity),
             title: Text('Moisture'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>(MoistureTable())));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MoistureTable()));
             },
           ),
           Padding(
@@ -117,17 +107,17 @@ class _MainDrawerState extends State<MainDrawer> {
             child: Text(
               "System",
               style: TextStyle(
-                color: Colors.white,
+                color: theme.colorScheme.onPrimary,
               ),
             ),
           ),
           ListTile(
-            textColor: tertiaryColor,
-            iconColor: tertiaryColor,
+            textColor: theme.colorScheme.onPrimary,
+            iconColor: theme.colorScheme.onPrimary,
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>(Settings())));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Settings()));
             },
           ),
         ],

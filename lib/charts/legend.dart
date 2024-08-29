@@ -43,7 +43,7 @@ class LegendItem extends StatelessWidget {
         SizedBox(width: 4),
         Text(
           text,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
       ],
     );

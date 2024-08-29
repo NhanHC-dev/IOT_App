@@ -13,44 +13,43 @@ class HumidityChart extends StatefulWidget {
 }
 
 class _HumidityChartState extends State<HumidityChart> {
-
-
-
-  late double _minHumidity = 0;
-  late double _maxHumidity = 0;
+  late double _minHumidity = 3.0;
+  late double _maxHumidity = 37.0;
 
   late List<Map<String, dynamic>> data = [];
   final Random random = Random();
-
-  Color primaryColor = Color.fromARGB(255, 21, 28, 47);
-  Color secondaryColor = Color.fromARGB(255, 32, 50, 77);
-  Color tertiaryColor = Color.fromARGB(255, 37, 213, 179);
 
   Future<void> getTemperatureFromDevice() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // Retrieve stored values or set default values if not available
-    double minHumidity = prefs.getDouble('minHumidity') ?? 3.0; // Default min temperature 3°C
-    double maxHumidity = prefs.getDouble('maxHumidity') ?? 37.0; // Default max temperature 37°C
+    double minHumidity =
+        prefs.getDouble('minHumidity') ?? 3.0; // Default min temperature 3°C
+    double maxHumidity =
+        prefs.getDouble('maxHumidity') ?? 37.0; // Default max temperature 37°C
 
     setState(() {
-      _minHumidity = minHumidity*100; // Convert to range used in Slider
-      _maxHumidity = maxHumidity*100; // Convert to range used in Slider
+      _minHumidity = minHumidity * 100; // Convert to range used in Slider
+      _maxHumidity = maxHumidity * 100; // Convert to range used in Slider
     });
   }
-  void getData(){
+
+  void getData() {
     for (int i = 8; i <= 20; i++) {
       String time = i.toString().padLeft(2, '0') + ':00';
-      int value = 20 + random.nextInt(20); // Generates a number between 20 and 39
+      int value =
+          20 + random.nextInt(20); // Generates a number between 20 and 39
       data.add({
         'x': time,
         'y': value,
       });
     }
   }
+
   List<FlSpot> generateSpots() {
     return data.map((el) {
-      int x = int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
+      int x =
+          int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
       double y = el['y'].toDouble(); // Ensure y is double
       return FlSpot(x.toDouble(), y);
     }).toList();
@@ -58,7 +57,8 @@ class _HumidityChartState extends State<HumidityChart> {
 
   List<FlSpot> generateMaxSpots() {
     return data.map((el) {
-      int x = int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
+      int x =
+          int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
       double y = _maxHumidity; // Ensure y is double
       return FlSpot(x.toDouble(), y);
     }).toList();
@@ -66,7 +66,8 @@ class _HumidityChartState extends State<HumidityChart> {
 
   List<FlSpot> generateMinSpots() {
     return data.map((el) {
-      int x = int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
+      int x =
+          int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
       double y = _minHumidity; // Ensure y is double
       return FlSpot(x.toDouble(), y);
     }).toList();
@@ -81,13 +82,21 @@ class _HumidityChartState extends State<HumidityChart> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.white,
-        backgroundColor: primaryColor,
-        title: Text("Humidity Chart"),
+        foregroundColor: theme.colorScheme.onPrimary,
+        backgroundColor: theme.primaryColor,
+        title: Text(
+          "Humidity Chart",
+          style: TextStyle(
+            color: theme.colorScheme.onPrimary,
+            fontSize: 24
+          ),
+        ),
       ),
-      backgroundColor: primaryColor,
+      backgroundColor: theme.primaryColor,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 16.0),
@@ -107,7 +116,8 @@ class _HumidityChartState extends State<HumidityChart> {
                           getTitlesWidget: (value, meta) {
                             return Text(
                               value.toInt().toString(),
-                              style: const TextStyle(color: Colors.white),
+                              style:
+                                  TextStyle(color: theme.colorScheme.onPrimary),
                             );
                           },
                         ),
@@ -119,7 +129,8 @@ class _HumidityChartState extends State<HumidityChart> {
                           getTitlesWidget: (value, meta) {
                             return Text(
                               '${value.toInt()}',
-                              style: const TextStyle(color: Colors.white),
+                              style:
+                                  TextStyle(color: theme.colorScheme.onPrimary),
                             );
                           },
                         ),
@@ -127,13 +138,13 @@ class _HumidityChartState extends State<HumidityChart> {
                     ),
                     borderData: FlBorderData(
                       show: true,
-                      border: Border.all(color: const Color(0xFF707070)),
+                      border: Border.all(color: theme.dividerColor),
                     ),
                     lineBarsData: [
                       LineChartBarData(
-                        spots:generateSpots(),
+                        spots: generateSpots(),
                         isCurved: true,
-                        color: tertiaryColor,
+                        color: theme.colorScheme.secondary,
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -141,7 +152,8 @@ class _HumidityChartState extends State<HumidityChart> {
                       LineChartBarData(
                         spots: generateMinSpots(),
                         isCurved: false,
-                        color: Color.fromARGB(255, 81, 91, 193),
+                        color: theme
+                            .colorScheme.onSecondary, // Darker color variant
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -149,7 +161,7 @@ class _HumidityChartState extends State<HumidityChart> {
                       LineChartBarData(
                         spots: generateMaxSpots(),
                         isCurved: false,
-                        color: Colors.red,
+                        color: theme.colorScheme.error, // Use the error color for red
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -160,7 +172,7 @@ class _HumidityChartState extends State<HumidityChart> {
                       drawVerticalLine: false,
                       getDrawingHorizontalLine: (value) {
                         return FlLine(
-                          color: const Color(0xFF707070),
+                          color: theme.dividerColor,
                           strokeWidth: 1,
                           dashArray: [4],
                         );
@@ -169,7 +181,7 @@ class _HumidityChartState extends State<HumidityChart> {
                   ),
                 ),
               ),
-              Legend(title: "Humidity",color: tertiaryColor)
+              Legend(title: "Humidity", color: theme.colorScheme.secondary),
             ],
           ),
         ),
