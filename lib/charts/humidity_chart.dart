@@ -133,7 +133,7 @@ class _HumidityChartState extends State<HumidityChart> {
                       LineChartBarData(
                         spots:generateSpots(),
                         isCurved: true,
-                        color: Colors.tealAccent,
+                        color: Colors.pinkAccent,
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -141,7 +141,7 @@ class _HumidityChartState extends State<HumidityChart> {
                       LineChartBarData(
                         spots: generateMinSpots(),
                         isCurved: false,
-                        color: Colors.blueAccent,
+                        color: Colors.greenAccent,
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -149,7 +149,7 @@ class _HumidityChartState extends State<HumidityChart> {
                       LineChartBarData(
                         spots: generateMaxSpots(),
                         isCurved: false,
-                        color: Colors.redAccent,
+                        color: Colors.red,
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -169,7 +169,7 @@ class _HumidityChartState extends State<HumidityChart> {
                   ),
                 ),
               ),
-              Legend()
+              Legend(title: "Humidity",color: Colors.pinkAccent)
             ],
           ),
         ),

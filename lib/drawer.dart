@@ -29,33 +29,36 @@ class _MainDrawerState extends State<MainDrawer> {
           Column(
             children: [
               Text(
-                'IoT ADMIN',
+                'IoT Portal',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                 ),
               ),
+              SizedBox(height: 8,),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
-                    "assets/iot.png",
-                    scale: 0.5,
+                    "assets/iot.webp",
+                    scale: 2.5,
                   ),
+                  SizedBox(height: 8,),
                   Text(
                     "Quy Do",
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 28,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  SizedBox(height: 8,),
                   Text(
                     "Administrator",
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white,
+                      color: Colors.white54,
                       fontWeight: FontWeight.bold,
                     ),
                   )
@@ -63,9 +66,10 @@ class _MainDrawerState extends State<MainDrawer> {
               )
             ],
           ),
+          SizedBox(height: 20,),
           ListTile(
-            textColor: Colors.white,
-            iconColor: Colors.white,
+            textColor: tertiaryColor,
+            iconColor: tertiaryColor,
             leading: Icon(Icons.home),
             title: Text('Dashboard'),
             onTap: () {
@@ -82,8 +86,8 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
           ),
           ListTile(
-            textColor: Colors.white,
-            iconColor: Colors.white,
+            textColor: Colors.lightBlue,
+            iconColor: Colors.lightBlue,
             leading: Icon(Icons.thermostat),
             title: Text('Temperatures'),
             onTap: () {
@@ -91,18 +95,18 @@ class _MainDrawerState extends State<MainDrawer> {
             },
           ),
           ListTile(
-            textColor: Colors.white,
-            iconColor: Colors.white,
-            leading: Icon(Icons.settings),
+            textColor: Colors.pinkAccent,
+            iconColor: Colors.pinkAccent,
+            leading: Icon(Icons.water_drop_outlined),
             title: Text('Humidity'),
             onTap: () {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>(HumidityTable())));
             },
           ),
           ListTile(
-            textColor: Colors.white,
-            iconColor: Colors.white,
-            leading: Icon(Icons.water_drop),
+            textColor: Colors.yellowAccent,
+            iconColor: Colors.yellowAccent,
+            leading: Icon(Icons.opacity),
             title: Text('Moisture'),
             onTap: () {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>(MoistureTable())));
@@ -111,16 +115,16 @@ class _MainDrawerState extends State<MainDrawer> {
           Padding(
             padding: const EdgeInsets.only(left: 12.0),
             child: Text(
-              "Settings",
+              "System",
               style: TextStyle(
                 color: Colors.white,
               ),
             ),
           ),
           ListTile(
-            textColor: Colors.white,
-            iconColor: Colors.white,
-            leading: Icon(Icons.contacts),
+            textColor: Colors.white70,
+            iconColor: Colors.white70,
+            leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>(Settings())));

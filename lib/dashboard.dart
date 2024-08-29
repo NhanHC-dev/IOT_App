@@ -29,11 +29,9 @@ class _DashboardState extends State<Dashboard> {
   double avgHum = 67;
   double avgMois = 30;
 
-
   Color primaryColor = Color.fromARGB(255, 21, 28, 47);
   Color secondaryColor = Color.fromARGB(255, 32, 50, 77);
   Color tertiaryColor = Color.fromARGB(255, 37, 213, 179);
-
 
   @override
   void initState() {
@@ -82,13 +80,13 @@ class _DashboardState extends State<Dashboard> {
   }
 
   List<dynamic> filterData(
-      List<dynamic> data,
-      double max,
-      double min,
-      String? startDate,
-      String? endDate,
-      String type,
-      ) {
+    List<dynamic> data,
+    double max,
+    double min,
+    String? startDate,
+    String? endDate,
+    String type,
+  ) {
     // Filtering logic here
     return data.where((item) {
       final value = item['value'];
@@ -96,17 +94,14 @@ class _DashboardState extends State<Dashboard> {
     }).toList();
   }
 
-
   Widget GeneralCard({
-    IconData icon = Icons.home,
-    IconData icon_water = Icons.water_drop,
-    IconData icon_thermometer = Icons.thermostat,
-    
+    IconData icon = Icons.question_mark,
     required double width,
     required double height,
     required String average,
     required String label,
     required double percentage,
+    required Color color,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -114,62 +109,62 @@ class _DashboardState extends State<Dashboard> {
         color: secondaryColor,
       ),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      padding:  EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       width: width,
       height: height,
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  icon_thermometer,
-                  color: tertiaryColor,
-                  size: 28,
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  average.toString(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                  ),
-                ),
-                SizedBox(height: 4.0),
-                Text(
-                  label,
-                  style: TextStyle(
-                      color: tertiaryColor,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold
-                  ),
-                ),
-              ],
+            Text(
+              label,
+              style: TextStyle(
+                  color: color,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(
-                  value: percentage * 0.01,
-                  strokeWidth: 5.0,
-                  color: tertiaryColor,
-                  backgroundColor: tertiaryColor.withOpacity(0.2),
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  '${percentage}%',
-                  style: TextStyle(
-                    color: tertiaryColor,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            SizedBox(height: 16.0),
+            Icon(
+              icon,
+              color: color,
+              size:42,
             ),
-          ]
-      ),
+            SizedBox(height: 16.0),
+            Text(
+              average.toString(),
+              style: TextStyle(
+                color: tertiaryColor,
+                fontSize: 24.0,
+              ),
+            ),
+
+          ],
+        ),
+        Stack(
+          alignment: Alignment.center, // Center the text within the progress indicator
+          children: [
+            SizedBox(
+              height: 120,
+              width: 120,
+              child: CircularProgressIndicator(
+                value: percentage * 0.01,
+                strokeWidth: 8.0,
+                color: color,
+                backgroundColor: color.withOpacity(0.3)
+              ),
+            ),
+            Text(
+              '${percentage}%', // Display the percentage value
+              style: TextStyle(
+                color: color,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ]),
     );
   }
 
@@ -183,54 +178,88 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: primaryColor,
-        title: Text("IoT System"),
+        actions: [
+          Icon(Icons.dark_mode_outlined),
+          SizedBox(width: 24,),
+          Icon(Icons.notifications_none_outlined),
+          SizedBox(width: 18,)
+        ],
       ),
       body: SafeArea(
-        child: ListView(
-          children: [
-            GestureDetector(
-              onTap: (){
-                Navigator.of(context).push(MaterialPageRoute (
-                  builder: (BuildContext context) => const TempChart(),
-                ));
-              },
-              child: GeneralCard(
-                height: 120,
-                width: screenWidth,
-                label: "Temperature",
-                average: avgTemp.toString() + "°C",
-                percentage: 91,
+        child: Transform.translate(
+          offset: Offset(0, -10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 20,right: 20, bottom: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Text("IoT System",
+                      style: TextStyle(color: Colors.white, fontSize: 36),
+                    ),
+                    Text(
+                      "Welcome to your Weed Garden",
+                      style: TextStyle(color: tertiaryColor, fontSize: 14),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: (){
-                Navigator.of(context).push(MaterialPageRoute (
-                  builder: (BuildContext context) => const HumidityChart(),
-                ));
-              },
-              child: GeneralCard(
-                height: 120,
-                width: screenWidth,
-                label: "Humidity",
-                average: avgHum.toString() + "%",
-                percentage: 67,
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => const TempChart(),
+                  ));
+                },
+                child: GeneralCard(
+                  icon: Icons.thermostat,
+                  height: 180,
+                  width: screenWidth,
+                  label: "Temperature",
+                  average: avgTemp.toString() + "°C",
+                  percentage: 91,
+                  color: Colors.lightBlue
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: (){
-                Navigator.of(context).push(MaterialPageRoute (
-                  builder: (BuildContext context) => const MoistureChart(),
-                ));
-              },
-              child: GeneralCard(
-                height: 120,
-                width: screenWidth,
-                label: "Moisture",
-                average: avgMois.toString() + "%",
-                percentage: 34,
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => const HumidityChart(),
+                  ));
+                },
+                child: GeneralCard(
+                  icon: Icons.water_drop_outlined,
+                  height: 180,
+                  width: screenWidth,
+                  label: "Humidity",
+                  average: avgHum.toString() + "%",
+                  percentage: 67,
+                  color: Colors.pinkAccent
+                ),
               ),
-            ),
-          ],
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => const MoistureChart(),
+                  ));
+                },
+                child: GeneralCard(
+                  icon: Icons.opacity,
+                  height: 180,
+                  width: screenWidth,
+                  label: "Moisture",
+                  average: avgMois.toString() + "%",
+                  percentage: 34,
+                  color: Colors.yellowAccent
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

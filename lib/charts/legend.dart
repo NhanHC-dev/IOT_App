@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Legend extends StatelessWidget {
+  late String title;
+  late Color color;
+  Legend({super.key, required String this.title, required Color this.color});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -10,9 +13,9 @@ class Legend extends StatelessWidget {
         children: [
           LegendItem(color: Colors.red, text: 'Maximum'),
           SizedBox(width: 16),
-          LegendItem(color: Colors.teal, text: 'Temperatures'),
+          LegendItem(color: color, text: title),
           SizedBox(width: 16),
-          LegendItem(color: Colors.blue, text: 'Minimum'),
+          LegendItem(color: Colors.greenAccent, text: 'Minimum'),
         ],
       ),
     );
