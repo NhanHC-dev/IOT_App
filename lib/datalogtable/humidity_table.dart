@@ -13,46 +13,50 @@ class _HumidityTableState extends State<HumidityTable> {
     {
       "id": 1,
       "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
+      "sensorName": 'Humidity Sensor #01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "humidity": '40',
     },
     {
       "id": 2,
       "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
+      "sensorName": 'Humidity Sensor #01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "humidity": '40',
     },
     {
       "id": 3,
       "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
+      "sensorName": 'Humidity Sensor #01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "humidity": '56',
     },
     {
       "id": 2,
       "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
+      "sensorName": 'Humidity Sensor #01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "humidity": '76',
     },
     {
       "id": 2,
       "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
+      "sensorName": 'Humidity Sensor #01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "humidity": '93',
     },
     {
       "id": 2,
       "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
+      "sensorName": 'Humidity Sensor #01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "humidity": '16',
     }
   ];
+
+  List<String> sensors = ['Humidity Sensor #01',];
+
+  late String? _selectedOption = null;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +67,7 @@ class _HumidityTableState extends State<HumidityTable> {
       drawer: MainDrawer(currentScreen: 'HumidityTable',),
       appBar: MainAppBar(),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        padding: EdgeInsets.only(left: 16, top: 4, bottom: 4,right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -78,17 +82,69 @@ class _HumidityTableState extends State<HumidityTable> {
                         fontSize: 36
                     ),
                   ),
-                  Text(
-                    "List of humidity information",
-                    style: TextStyle(
-                        color: theme.colorScheme.secondary,
-                        fontSize: 14
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "Sensor ",
+                        style: TextStyle(
+                            color: theme.colorScheme.secondary,
+                            fontSize: 14
+                        ),
+                      ),
+                      DropdownMenu<String>(
+                        trailingIcon: Icon(
+                          Icons.add,
+                          size: 0,
+                        ),
+                        selectedTrailingIcon: Icon(
+                          Icons.add,
+                          size: 0,
+                        ),
+                        onSelected: (String? newValue) {
+                          setState(() {
+                            _selectedOption = newValue!;
+                          });
+                        },
+                        inputDecorationTheme: InputDecorationTheme(
+                          constraints: BoxConstraints(
+                            maxHeight: 46,
+                          ),
+                          contentPadding: EdgeInsets.all(0),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                        ),
+                        hintText: "None",
+                        dropdownMenuEntries:
+                        sensors.map<DropdownMenuEntry<String>>((sensor) {
+                          return DropdownMenuEntry<String>(
+                            value: sensor, // Use sensor name
+                            label: sensor, // Display sensor name
+                          );
+                        }).toList(),
+                        menuStyle: MenuStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                              theme.cardColor), // secondary color
+                          shadowColor: WidgetStateProperty.all(
+                              theme.cardColor.withOpacity(0.2)), // tertiary color
+                        ),
+                        textStyle: TextStyle(
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 16,),
+            if(_selectedOption!=null)...[SizedBox(height: 16,),
             Expanded(
               child: ListView.builder(
                 itemCount: data.length,
@@ -159,7 +215,7 @@ class _HumidityTableState extends State<HumidityTable> {
                   );
                 },
               ),
-            ),
+            ),]
           ],
         ),
       ),

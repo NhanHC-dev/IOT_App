@@ -55,6 +55,10 @@ class _TemperatureTableState extends State<TemperatureTable> {
     }
   ];
 
+  List<String> sensors = ['Temperature Sensor #01',];
+
+  late String? _selectedOption = null;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -79,17 +83,69 @@ class _TemperatureTableState extends State<TemperatureTable> {
                         fontSize: 36
                     ),
                   ),
-                  Text(
-                    "List of temperature information",
-                    style: TextStyle(
-                        color: theme.colorScheme.secondary,
-                        fontSize: 14
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "Sensor ",
+                        style: TextStyle(
+                            color: theme.colorScheme.secondary,
+                            fontSize: 14
+                        ),
+                      ),
+                      DropdownMenu<String>(
+                        trailingIcon: Icon(
+                          Icons.add,
+                          size: 0,
+                        ),
+                        selectedTrailingIcon: Icon(
+                          Icons.add,
+                          size: 0,
+                        ),
+                        onSelected: (String? newValue) {
+                          setState(() {
+                            _selectedOption = newValue!;
+                          });
+                        },
+                        inputDecorationTheme: InputDecorationTheme(
+                          constraints: BoxConstraints(
+                            maxHeight: 46,
+                          ),
+                          contentPadding: EdgeInsets.all(0),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                        ),
+                        hintText: "None",
+                        dropdownMenuEntries:
+                        sensors.map<DropdownMenuEntry<String>>((sensor) {
+                          return DropdownMenuEntry<String>(
+                            value: sensor, // Use sensor name
+                            label: sensor, // Display sensor name
+                          );
+                        }).toList(),
+                        menuStyle: MenuStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                              theme.cardColor), // secondary color
+                          shadowColor: WidgetStateProperty.all(
+                              theme.cardColor.withOpacity(0.2)), // tertiary color
+                        ),
+                        textStyle: TextStyle(
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 16,),
+            if(_selectedOption!=null)...[SizedBox(height: 16,),
             Expanded(
               child: ListView.builder(
                 itemCount: data.length,
@@ -160,7 +216,7 @@ class _TemperatureTableState extends State<TemperatureTable> {
                   );
                 },
               ),
-            ),
+            ),]
           ],
         ),
       ),

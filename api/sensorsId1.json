@@ -1,0 +1,8 @@
+{
+    "id": 1,
+    "location": "Weed Garden",
+    "location_id": 1,
+    "name": "DHT11",
+    "type": "temperature",
+    "type_id": 1
+}
