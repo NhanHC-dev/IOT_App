@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:iot_app/ThemeProvider.dart';
 import 'package:iot_app/dashboard.dart';
 import 'package:provider/provider.dart'; // Import provider package
-
+// import 'package:flutter/services.dart';
 void main() {
+  //   WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]).then((_) {
+  //   runApp(MyApp());
+  // });
   runApp(
+    
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
       child: IotApp(),

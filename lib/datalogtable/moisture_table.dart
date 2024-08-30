@@ -61,7 +61,7 @@ class _MoistureTableState extends State<MoistureTable> {
 
     return Scaffold(
       backgroundColor: theme.primaryColor,
-      drawer: MainDrawer(),
+      drawer: MainDrawer(currentScreen: 'MoistureTable',),
       appBar: MainAppBar(),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),

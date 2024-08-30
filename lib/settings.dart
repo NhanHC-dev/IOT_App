@@ -60,7 +60,7 @@ class _SettingsState extends State<Settings> {
 
     return Scaffold(
       backgroundColor: theme.primaryColor,
-      drawer: MainDrawer(),
+      drawer: MainDrawer(currentScreen: 'Settings',),
       appBar: MainAppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),

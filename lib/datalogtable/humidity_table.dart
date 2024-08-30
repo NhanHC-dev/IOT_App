@@ -60,7 +60,7 @@ class _HumidityTableState extends State<HumidityTable> {
 
     return Scaffold(
       backgroundColor: theme.primaryColor,
-      drawer: MainDrawer(),
+      drawer: MainDrawer(currentScreen: 'HumidityTable',),
       appBar: MainAppBar(),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),

@@ -152,8 +152,7 @@ class _MoistureChartState extends State<MoistureChart> {
                       LineChartBarData(
                         spots: generateMinSpots(),
                         isCurved: false,
-                        color: theme
-                            .colorScheme.onSecondary, // Darker color variant
+                        color: Color.fromARGB(255, 81, 91, 193), // Darker color variant
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),

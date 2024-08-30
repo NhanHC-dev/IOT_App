@@ -151,8 +151,7 @@ class _TempChartState extends State<TempChart> {
                       LineChartBarData(
                         spots: generateMinSpots(),
                         isCurved: false,
-                        color: theme
-                            .colorScheme.onSecondary,
+                        color: Color.fromARGB(255, 81, 91, 193),
                         // Darker color variant
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),

@@ -3,10 +3,18 @@ import 'package:iot_app/dashboard.dart';
 import 'package:iot_app/datalogtable/humidity_table.dart';
 import 'package:iot_app/datalogtable/moisture_table.dart';
 import 'package:iot_app/settings.dart';
+import 'package:iot_app/datalogtable/temparature_table.dart';
 
-import 'datalogtable/temparature_table.dart';
+class MainDrawer extends StatefulWidget {
+  final String currentScreen;
 
-class MainDrawer extends StatelessWidget {
+  const MainDrawer({Key? key, required this.currentScreen}) : super(key: key);
+
+  @override
+  _MainDrawerState createState() => _MainDrawerState();
+}
+
+class _MainDrawerState extends State<MainDrawer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -58,12 +66,23 @@ class MainDrawer extends StatelessWidget {
           ),
           SizedBox(height: 20),
           ListTile(
-            textColor: theme.colorScheme.onPrimary,
-            iconColor: theme.colorScheme.onPrimary,
+            textColor: widget.currentScreen == 'Dashboard'
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.onPrimary,
+            iconColor: widget.currentScreen == 'Dashboard'
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.onPrimary,
             leading: Icon(Icons.home),
             title: Text('Dashboard'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()));
+              if (widget.currentScreen != 'Dashboard') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Dashboard(currentScreen: 'Dashboard'),
+                  ),
+                );
+              }
             },
           ),
           Padding(
@@ -76,30 +95,63 @@ class MainDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            textColor: theme.colorScheme.onPrimary,
-            iconColor: theme.colorScheme.onPrimary,
+            textColor: widget.currentScreen == 'TemperatureTable'
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.onPrimary,
+            iconColor: widget.currentScreen == 'TemperatureTable'
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.onPrimary,
             leading: Icon(Icons.thermostat),
             title: Text('Temperatures'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TemperatureTable()));
+              if (widget.currentScreen != 'TemperatureTable') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TemperatureTable(),
+                  ),
+                );
+              }
             },
           ),
           ListTile(
-            textColor: theme.colorScheme.onPrimary,
-            iconColor: theme.colorScheme.onPrimary,
+            textColor: widget.currentScreen == 'HumidityTable'
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.onPrimary,
+            iconColor: widget.currentScreen == 'HumidityTable'
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.onPrimary,
             leading: Icon(Icons.water_drop_outlined),
             title: Text('Humidity'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HumidityTable()));
+              if (widget.currentScreen != 'HumidityTable') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HumidityTable(),
+                  ),
+                );
+              }
             },
           ),
           ListTile(
-            textColor: theme.colorScheme.onPrimary,
-            iconColor: theme.colorScheme.onPrimary,
+            textColor: widget.currentScreen == 'MoistureTable'
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.onPrimary,
+            iconColor: widget.currentScreen == 'MoistureTable'
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.onPrimary,
             leading: Icon(Icons.opacity),
             title: Text('Moisture'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MoistureTable()));
+              if (widget.currentScreen != 'MoistureTable') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MoistureTable(),
+                  ),
+                );
+              }
             },
           ),
           Padding(
@@ -112,12 +164,23 @@ class MainDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            textColor: theme.colorScheme.onPrimary,
-            iconColor: theme.colorScheme.onPrimary,
+            textColor: widget.currentScreen == 'Settings'
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.onPrimary,
+            iconColor: widget.currentScreen == 'Settings'
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.onPrimary,
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Settings()));
+              if (widget.currentScreen != 'Settings') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Settings(),
+                  ),
+                );
+              }
             },
           ),
         ],

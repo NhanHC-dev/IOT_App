@@ -61,7 +61,7 @@ class _TemperatureTableState extends State<TemperatureTable> {
 
     return Scaffold(
       backgroundColor: theme.primaryColor,
-      drawer: MainDrawer(),
+      drawer: MainDrawer(currentScreen: 'TemperatureTable',),
       appBar: MainAppBar(),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),

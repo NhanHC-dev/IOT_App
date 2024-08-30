@@ -8,7 +8,9 @@ import 'package:iot_app/charts/temp_chart.dart';
 import 'package:iot_app/drawer.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  final String? currentScreen;
+
+  const Dashboard({Key? key, this.currentScreen}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -43,7 +45,7 @@ class _DashboardState extends State<Dashboard> {
     final data = await json.decode(response);
 
     setState(() {
-      temperatureData = data['temperature'];
+      temperatureData = List<double>.from(data['temperature']);
       humidityData = data['humidity'];
     });
   }
@@ -127,21 +129,20 @@ class _DashboardState extends State<Dashboard> {
             Icon(
               icon,
               color: theme.colorScheme.secondary,
-              size:42,
+              size: 42,
             ),
             SizedBox(height: 16.0),
             Text(
-              average.toString(),
+              average,
               style: TextStyle(
                 color: theme.colorScheme.onPrimary,
                 fontSize: 24.0,
               ),
             ),
-
           ],
         ),
         Stack(
-          alignment: Alignment.center, // Center the text within the progress indicator
+          alignment: Alignment.center,
           children: [
             SizedBox(
               height: 120,
@@ -150,11 +151,11 @@ class _DashboardState extends State<Dashboard> {
                 value: percentage * 0.01,
                 strokeWidth: 8.0,
                 color: theme.colorScheme.secondary,
-                backgroundColor: Color.fromARGB(255, 81, 91, 193).withOpacity(0.6)
+                backgroundColor: Color.fromARGB(255, 81, 91, 193).withOpacity(0.6),
               ),
             ),
             Text(
-              '${percentage}%', // Display the percentage value
+              '${percentage}%',
               style: TextStyle(
                 color: theme.colorScheme.secondary,
                 fontSize: 20.0,
@@ -170,12 +171,11 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     var screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      drawer: MainDrawer(),
+      drawer: MainDrawer(currentScreen: 'Dashboard'),
       appBar: MainAppBar(),
       body: SafeArea(
         child: Transform.translate(
@@ -192,11 +192,14 @@ class _DashboardState extends State<Dashboard> {
                     SizedBox(height: 16),
                     Text(
                       "IoT System",
-                      style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 36),
+                      style: TextStyle(
+                          color: theme.textTheme.bodyMedium?.color,
+                          fontSize: 36),
                     ),
                     Text(
                       "Welcome to your Weed Garden",
-                      style: TextStyle(color: theme.colorScheme.secondary, fontSize: 14),
+                      style: TextStyle(
+                          color: theme.colorScheme.secondary, fontSize: 14),
                     ),
                   ],
                 ),
@@ -212,9 +215,9 @@ class _DashboardState extends State<Dashboard> {
                   height: 180,
                   width: screenWidth,
                   label: "Temperature",
-                  average: avgTemp.toString() + "°C",
+                  average: "$avgTemp°C",
                   percentage: 91,
-                  theme: theme
+                  theme: theme,
                 ),
               ),
               GestureDetector(
@@ -228,9 +231,9 @@ class _DashboardState extends State<Dashboard> {
                   height: 180,
                   width: screenWidth,
                   label: "Humidity",
-                  average: avgHum.toString() + "%",
+                  average: "$avgHum%",
                   percentage: 67,
-                  theme: theme
+                  theme: theme,
                 ),
               ),
               GestureDetector(
@@ -244,9 +247,9 @@ class _DashboardState extends State<Dashboard> {
                   height: 180,
                   width: screenWidth,
                   label: "Moisture",
-                  average: avgMois.toString() + "%",
+                  average: "$avgMois%",
                   percentage: 34,
-                  theme: theme
+                  theme: theme,
                 ),
               ),
             ],
