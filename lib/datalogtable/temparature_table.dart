@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iot_app/api/temperature_repo.dart';
 import 'package:iot_app/appbar.dart';
 import 'package:iot_app/drawer.dart';
 
@@ -58,6 +59,24 @@ class _TemperatureTableState extends State<TemperatureTable> {
   List<String> sensors = ['Temperature Sensor #01',];
 
   late String? _selectedOption = null;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  Future<void> _loadData() async {
+    dynamic moistureData = await TemperatureRepo.getTemperatureDataBySensorId(1);
+    setState(() {
+      data = List<Map<String, dynamic>>.from(moistureData);
+    });
+    _selectedOption = data[0]["sensor_name"];
+  }
+
+  void changeSensor(int id){
+
+  }
 
   @override
   Widget build(BuildContext context) {

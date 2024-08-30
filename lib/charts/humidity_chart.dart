@@ -135,6 +135,18 @@ class _HumidityChartState extends State<HumidityChart> {
                           },
                         ),
                       ),
+                      // Hide titles on the right side
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: false,
+                        ),
+                      ),
+                      // Hide titles on the top
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: false,
+                        ),
+                      ),
                     ),
                     borderData: FlBorderData(
                       show: true,

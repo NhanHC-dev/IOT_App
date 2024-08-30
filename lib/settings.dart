@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iot_app/api/sensors_repo.dart';
+import 'package:iot_app/api/settings_repo.dart';
 import 'package:iot_app/appbar.dart';
 import 'package:iot_app/dashboard.dart';
 import 'package:iot_app/drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -15,20 +18,20 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   // Variables for Temperature
-  late double? _maxTemp;
-  late double? _minTemp;
+  late double? _maxTemp = null;
+  late double? _minTemp = null;
 
   // Variables for Humidity
-  late double? _maxHumidity;
-  late double? _minHumidity;
+  late double? _maxHumidity = null;
+  late double? _minHumidity = null;
 
   // Variables for Moisture
-  late double? _maxMoisture;
-  late double? _minMoisture;
+  late double? _maxMoisture = null;
+  late double? _minMoisture = null;
 
   late String sensorName = "";
 
-  List<Map<String, dynamic>> settings = [
+  Map<String, dynamic> settings =
     {
       "id": 9,
       "max_humidity": 90.0,
@@ -38,18 +41,7 @@ class _SettingsState extends State<Settings> {
       "min_moisture": null,
       "min_temperature": 10.0,
       "sensor_id": 1
-    },
-    {
-      "id": 10,
-      "max_humidity": null,
-      "max_moisture": 90.0,
-      "max_temperature": null,
-      "min_humidity": null,
-      "min_moisture": 10.0,
-      "min_temperature": null,
-      "sensor_id": 2
-    }
-  ];
+    };
 
   // Define sensors as a list of maps
   List<Map<String, dynamic>> sensors = [
@@ -75,82 +67,126 @@ class _SettingsState extends State<Settings> {
 
   @override
   void initState() {
+    _loadData(); // Load sensors and settings data
+    _updateSliderValues(); // Update slider values after loading data
     super.initState();
-    _loadSettings();
-    _updateSliderValues();
   }
 
-  // Load saved settings
-  Future<void> _loadSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+// Load sensors and settings data
+  Future<void> _loadData() async {
+    // Fetch sensors and settings data from the repositories
+    dynamic dataSensors = await SensorsRepo.getSensors();
+    dynamic dataSettings = await SettingsRepo.getSettingsById(1);
+
+    // Assuming the repository returns lists or maps similar to those you printed
     setState(() {
-      _maxTemp = prefs.getDouble('maxTemp');
-      _minTemp = prefs.getDouble('minTemp');
-      _maxHumidity = prefs.getDouble('maxHumidity');
-      _minHumidity = prefs.getDouble('minHumidity');
-      _maxMoisture = prefs.getDouble('maxMoisture');
-      _minMoisture = prefs.getDouble('minMoisture');
+      sensors = List<Map<String, dynamic>>.from(dataSensors);
+      settings = Map<String, dynamic>.from(dataSettings);
+    });
+    _selectedOption = sensors[0]["name"];
+
+    // After loading data, update the slider values to reflect the settings
+    _updateMinMaxValues();
+  }
+
+  Future<void> _saveSettings(BuildContext context) async {
+    if (_selectedOption != null) {
+      // Find the sensor based on the selected option (sensor name)
+      final selectedSensor = sensors.firstWhere(
+            (sensor) => sensor['name'] == _selectedOption,
+        orElse: () => {},
+      );
+
+      if (selectedSensor.isNotEmpty) {
+        final sensorId = selectedSensor['id'];
+
+        // Create a settings map to save
+        final settingsToSave = {
+          'sensor_id': sensorId,
+          'max_temperature': _maxTemp,
+          'min_temperature': _minTemp,
+          'max_humidity': _maxHumidity,
+          'min_humidity': _minHumidity,
+          'max_moisture': _maxMoisture,
+          'min_moisture': _minMoisture,
+        };
+
+        try {
+          // Save the settings using the repository
+          await SettingsRepo.updateSettingsById(sensorId, settingsToSave);
+          // Show a success dialog after saving
+          _showSaveSuccessDialog(context);
+        } catch (error) {
+          // Handle save error (e.g., show an error dialog or log the error)
+          print('Error saving settings: $error');
+        }
+      }
+    }
+  }
+
+// Update slider values based on selected sensor settings
+  void _updateSliderValues() async {
+    if (_selectedOption != null) {
+      final selectedSensor = sensors.firstWhere(
+            (sensor) => sensor['name'] == _selectedOption,
+        orElse: () => {},
+      );
+
+      if (selectedSensor.isNotEmpty) {
+        final sensorId = selectedSensor['id'];
+        dynamic dataSettings = await SettingsRepo.getSettingsById(sensorId);
+        setState(() {
+          settings = Map<String, dynamic>.from(dataSettings);
+        });
+        _updateMinMaxValues();
+      }
+    }
+  }
+
+  void _updateMinMaxValues() {
+
+          setState(() {
+            _maxTemp = (settings['max_temperature'] != null)
+                ? settings['max_temperature'] / 100
+                : null;
+            _minTemp = (settings['min_temperature'] != null)
+                ? settings['min_temperature'] / 100
+                : null;
+            _maxHumidity = (settings['max_humidity'] != null)
+                ? settings['max_humidity'] / 100
+                : null;
+            _minHumidity = (settings['min_humidity'] != null)
+                ? settings['min_humidity'] / 100
+                : null;
+            _maxMoisture = (settings['max_moisture'] != null)
+                ? settings['max_moisture'] / 100
+                : null;
+            _minMoisture = (settings['min_moisture'] != null)
+                ? settings['min_moisture'] / 100
+                : null;
+          });
+    }
+
+  void _showSaveSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Success'),
+          content: Text('Settings saved successfully.'),
+        );
+      },
+    );
+
+    // Wait for 500 milliseconds before navigating to the dashboard
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.of(context).pop(); // Close the dialog
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => Dashboard()),
+      );
     });
   }
 
-  // Save settings
-  Future<void> _saveSettings(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    (_maxTemp != null)
-        ?await prefs.setDouble('maxTemp', _maxTemp!)
-        : null;
-    (_minTemp != null)
-        ?await prefs.setDouble('minTemp', _minTemp!)
-        : null;
-    (_maxHumidity != null)
-        ?await prefs.setDouble('maxHumidity', _maxHumidity!)
-        : null;
-    (_minHumidity != null)
-        ?await prefs.setDouble('minHumidity', _minHumidity!)
-        : null;
-    (_maxMoisture != null)
-        ?await prefs.setDouble('maxMoisture', _maxMoisture!)
-        : null;
-    (_minMoisture != null)
-        ?await prefs.setDouble('minMoisture', _minMoisture!)
-        : null;
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => Dashboard()));
-  }
-
-  // Update slider values based on selected sensor
-  void _updateSliderValues() {
-    final selectedSensor = sensors.firstWhere(
-        (sensor) => sensor['name'] == _selectedOption,
-        orElse: () => {});
-    if (selectedSensor.isNotEmpty) {
-      final sensorId = selectedSensor['id'];
-      final settingsForSensor = settings.firstWhere(
-        (setting) => setting['sensor_id'] == sensorId,
-        orElse: () => {},
-      );
-      setState(() {
-        _maxTemp = (settingsForSensor['max_temperature'] != null)
-            ? settingsForSensor['max_temperature'] / 100
-            : null;
-        _minTemp = settingsForSensor['min_temperature'] != null
-            ? settingsForSensor['min_temperature'] / 100
-            : null;
-        _maxHumidity = settingsForSensor['max_humidity'] != null
-            ? settingsForSensor['max_humidity'] / 100
-            : null;
-        _minHumidity = settingsForSensor['min_humidity'] != null
-            ? settingsForSensor['min_humidity'] / 100
-            : null;
-        _maxMoisture = settingsForSensor['max_moisture'] != null
-            ? settingsForSensor['max_moisture'] / 100
-            : null;
-        _minMoisture = settingsForSensor['min_moisture'] != null
-            ? settingsForSensor['min_moisture'] / 100
-            : null;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,57 +208,61 @@ class _SettingsState extends State<Settings> {
           Row(
             children: [
               Text(
-                "Save your settings for sensor ",
+                "Settings for sensor ",
                 style:
                     TextStyle(color: theme.colorScheme.secondary, fontSize: 14),
               ),
-              DropdownMenu<String>(
-                trailingIcon: Icon(
-                  Icons.add,
-                  size: 0,
-                ),
-                selectedTrailingIcon: Icon(
-                  Icons.add,
-                  size: 0,
-                ),
-                onSelected: (String? newValue) {
-                  setState(() {
-                    _selectedOption = newValue!;
-                    _updateSliderValues();
-                  });
-                },
-                inputDecorationTheme: InputDecorationTheme(
-                  constraints: BoxConstraints(
-                    maxHeight: 46,
+              Expanded(
+                flex: 1,
+                child: DropdownMenu<String>(
+                  trailingIcon: Icon(
+                    Icons.add,
+                    size: 0,
                   ),
-                  contentPadding: EdgeInsets.all(0),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
+                  selectedTrailingIcon: Icon(
+                    Icons.add,
+                    size: 0,
+                  ),
+                  onSelected: (String? newValue) {
+                    setState(() {
+                      print(newValue);
+                      _selectedOption = newValue!;
+                      _updateSliderValues();
+                    });
+                  },
+                  inputDecorationTheme: InputDecorationTheme(
+                    constraints: BoxConstraints(
+                      maxHeight: 46,
+                    ),
+                    contentPadding: EdgeInsets.all(0),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                      ),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
+                  initialSelection: _selectedOption,
+                  dropdownMenuEntries:
+                      sensors.map<DropdownMenuEntry<String>>((sensor) {
+                    return DropdownMenuEntry<String>(
+                      value: sensor['name'], // Use sensor name
+                      label: sensor['name'], // Display sensor name
+                    );
+                  }).toList(),
+                  menuStyle: MenuStyle(
+                    backgroundColor: WidgetStateProperty.all(
+                        theme.cardColor), // secondary color
+                    shadowColor: WidgetStateProperty.all(
+                        theme.cardColor.withOpacity(0.2)), // tertiary color
                   ),
-                ),
-                hintText: "None",
-                dropdownMenuEntries:
-                    sensors.map<DropdownMenuEntry<String>>((sensor) {
-                  return DropdownMenuEntry<String>(
-                    value: sensor['name'], // Use sensor name
-                    label: sensor['name'], // Display sensor name
-                  );
-                }).toList(),
-                menuStyle: MenuStyle(
-                  backgroundColor: WidgetStateProperty.all(
-                      theme.cardColor), // secondary color
-                  shadowColor: WidgetStateProperty.all(
-                      theme.cardColor.withOpacity(0.2)), // tertiary color
-                ),
-                textStyle: TextStyle(
-                  color: theme.colorScheme.onPrimary,
+                  textStyle: TextStyle(
+                    color: theme.colorScheme.onPrimary,
+                  ),
                 ),
               ),
             ],
@@ -246,7 +286,7 @@ class _SettingsState extends State<Settings> {
                   });
                 },
                 min: 0.0,
-                max: 0.37,
+                max: 1.0,
                 divisions: 100,
                 label: (_maxTemp! * 100).toStringAsFixed(0) + '°C',
               ),
@@ -263,7 +303,7 @@ class _SettingsState extends State<Settings> {
                   });
                 },
                 min: 0.0,
-                max: 0.37,
+                max: 1.0,
                 divisions: 100,
                 label: (_minTemp! * 100).toStringAsFixed(0) + '°C',
               ),

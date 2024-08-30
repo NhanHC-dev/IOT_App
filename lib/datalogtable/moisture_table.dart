@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iot_app/api/moisture_repo.dart';
 import 'package:iot_app/appbar.dart';
 import 'package:iot_app/drawer.dart';
 
@@ -13,51 +14,68 @@ class _MoistureTableState extends State<MoistureTable> {
   late List<Map<String, dynamic>> data = [
     {
       "id": 1,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Moisture Sensor #01',
+      "date_time": '8/27/2024, 11:30:00 PM',
+      "sensor_name": 'WD-Moisture-01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "moisture": '40',
     },
     {
       "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Moisture Sensor #01',
+      "date_time": '8/27/2024, 11:30:00 PM',
+      "sensor_name": 'WD-Moisture-01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "moisture": '40',
     },
     {
       "id": 3,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Moisture Sensor #01',
+      "date_time": '8/27/2024, 11:30:00 PM',
+      "sensor_name": 'WD-Moisture-01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "moisture": '56',
     },
     {
       "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Moisture Sensor #01',
+      "date_time": '8/27/2024, 11:30:00 PM',
+      "sensor_name": 'WD-Moisture-01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "moisture": '76',
     },
     {
       "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Moisture Sensor #01',
+      "date_time": '8/27/2024, 11:30:00 PM',
+      "sensor_name": 'WD-Moisture-01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "moisture": '93',
     },
     {
       "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Moisture Sensor #01',
+      "date_time": '8/27/2024, 11:30:00 PM',
+      "sensor_name": 'WD-Moisture-01',
       "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
       "moisture": '16',
     }
   ];
 
-  List<String> sensors = ['Moisture Sensor #01',];
+  List<String> sensors = ['WD-Moisture-01',];
 
   late String? _selectedOption = null;
+  @override
+  void initState() {
+    super.initState();
+    // _loadData();
+  }
+
+  Future<void> _loadData() async {
+    dynamic moistureData = await MoistureRepo.getMoistureDataBySensorId(2);
+    setState(() {
+      data = List<Map<String, dynamic>>.from(moistureData);
+    });
+    _selectedOption = data[0]["sensor_name"];
+  }
+
+  void changeSensor(int id){
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +181,7 @@ class _MoistureTableState extends State<MoistureTable> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data[index]["sensorName"],
+                                  data[index]["sensor_name"],
                                   style: TextStyle(
                                     color: theme.colorScheme.onPrimary,
                                     fontSize: 20,
@@ -179,7 +197,7 @@ class _MoistureTableState extends State<MoistureTable> {
                                 ),
                                 SizedBox(height: 12),
                                 Text(
-                                  data[index]["dateTime"],
+                                  data[index]["date_time"],
                                   style: TextStyle(
                                     color: theme.colorScheme.secondary,
                                     fontSize: 16,
@@ -223,3 +241,4 @@ class _MoistureTableState extends State<MoistureTable> {
     );
   }
 }
+

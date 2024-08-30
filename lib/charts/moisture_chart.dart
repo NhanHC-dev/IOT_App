@@ -99,7 +99,7 @@ class _MoistureChartState extends State<MoistureChart> {
       backgroundColor: theme.primaryColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               Container(
@@ -116,8 +116,7 @@ class _MoistureChartState extends State<MoistureChart> {
                           getTitlesWidget: (value, meta) {
                             return Text(
                               value.toInt().toString(),
-                              style:
-                              TextStyle(color: theme.colorScheme.onPrimary),
+                              style: TextStyle(color: theme.colorScheme.onPrimary),
                             );
                           },
                         ),
@@ -129,10 +128,21 @@ class _MoistureChartState extends State<MoistureChart> {
                           getTitlesWidget: (value, meta) {
                             return Text(
                               '${value.toInt()}',
-                              style:
-                              TextStyle(color: theme.colorScheme.onPrimary),
+                              style: TextStyle(color: theme.colorScheme.onPrimary),
                             );
                           },
+                        ),
+                      ),
+                      // Hide titles on the right side
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: false,
+                        ),
+                      ),
+                      // Hide titles on the top
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: false,
                         ),
                       ),
                     ),
