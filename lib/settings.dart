@@ -212,57 +212,54 @@ class _SettingsState extends State<Settings> {
                 style:
                     TextStyle(color: theme.colorScheme.secondary, fontSize: 14),
               ),
-              Expanded(
-                flex: 1,
-                child: DropdownMenu<String>(
-                  trailingIcon: Icon(
-                    Icons.add,
-                    size: 0,
+              DropdownMenu<String>(
+                trailingIcon: Icon(
+                  Icons.add,
+                  size: 0,
+                ),
+                selectedTrailingIcon: Icon(
+                  Icons.add,
+                  size: 0,
+                ),
+                onSelected: (String? newValue) {
+                  setState(() {
+                    print(newValue);
+                    _selectedOption = newValue!;
+                    _updateSliderValues();
+                  });
+                },
+                width: 240,
+                inputDecorationTheme: InputDecorationTheme(
+                  constraints: BoxConstraints(
+                    maxHeight: 46
                   ),
-                  selectedTrailingIcon: Icon(
-                    Icons.add,
-                    size: 0,
-                  ),
-                  onSelected: (String? newValue) {
-                    setState(() {
-                      print(newValue);
-                      _selectedOption = newValue!;
-                      _updateSliderValues();
-                    });
-                  },
-                  inputDecorationTheme: InputDecorationTheme(
-                    constraints: BoxConstraints(
-                      maxHeight: 46,
-                    ),
-                    contentPadding: EdgeInsets.all(0),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                      ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
                     ),
                   ),
-                  initialSelection: _selectedOption,
-                  dropdownMenuEntries:
-                      sensors.map<DropdownMenuEntry<String>>((sensor) {
-                    return DropdownMenuEntry<String>(
-                      value: sensor['name'], // Use sensor name
-                      label: sensor['name'], // Display sensor name
-                    );
-                  }).toList(),
-                  menuStyle: MenuStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                        theme.cardColor), // secondary color
-                    shadowColor: WidgetStateProperty.all(
-                        theme.cardColor.withOpacity(0.2)), // tertiary color
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
                   ),
-                  textStyle: TextStyle(
-                    color: theme.colorScheme.onPrimary,
-                  ),
+                ),
+                initialSelection: _selectedOption,
+                dropdownMenuEntries:
+                    sensors.map<DropdownMenuEntry<String>>((sensor) {
+                  return DropdownMenuEntry<String>(
+                    value: sensor['name'], // Use sensor name
+                    label: sensor['name'], // Display sensor name
+                  );
+                }).toList(),
+                menuStyle: MenuStyle(
+                  backgroundColor: WidgetStateProperty.all(
+                      theme.cardColor), // secondary color
+                  shadowColor: WidgetStateProperty.all(
+                      theme.cardColor.withOpacity(0.2)), // tertiary color
+                ),
+                textStyle: TextStyle(
+                  color: theme.colorScheme.onPrimary,
                 ),
               ),
             ],
