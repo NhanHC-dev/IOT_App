@@ -58,7 +58,7 @@ class _MoistureTableState extends State<MoistureTable> {
 
   List<String> sensors = ['WD-Moisture-01',];
 
-  late String? _selectedOption = null;
+  late String? _selectedOption = 'WD-Moisture-01';
   @override
   void initState() {
     super.initState();
@@ -140,7 +140,7 @@ class _MoistureTableState extends State<MoistureTable> {
                             ),
                           ),
                         ),
-                        hintText: "None",
+                        initialSelection: _selectedOption,
                         dropdownMenuEntries:
                         sensors.map<DropdownMenuEntry<String>>((sensor) {
                           return DropdownMenuEntry<String>(

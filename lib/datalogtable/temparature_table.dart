@@ -58,7 +58,7 @@ class _TemperatureTableState extends State<TemperatureTable> {
 
   List<String> sensors = ['Temperature Sensor #01',];
 
-  late String? _selectedOption = null;
+  late String? _selectedOption = 'Temperature Sensor #01';
 
   @override
   void initState() {
@@ -141,7 +141,7 @@ class _TemperatureTableState extends State<TemperatureTable> {
                             ),
                           ),
                         ),
-                        hintText: "None",
+                        initialSelection: _selectedOption,
                         dropdownMenuEntries:
                         sensors.map<DropdownMenuEntry<String>>((sensor) {
                           return DropdownMenuEntry<String>(

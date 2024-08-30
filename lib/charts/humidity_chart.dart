@@ -99,7 +99,7 @@ class _HumidityChartState extends State<HumidityChart> {
       backgroundColor: theme.primaryColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               Container(

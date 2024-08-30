@@ -228,7 +228,7 @@ class _SettingsState extends State<Settings> {
                     _updateSliderValues();
                   });
                 },
-                width: 240,
+                width: 210,
                 inputDecorationTheme: InputDecorationTheme(
                   constraints: BoxConstraints(
                     maxHeight: 46

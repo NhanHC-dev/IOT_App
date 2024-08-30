@@ -56,7 +56,7 @@ class _HumidityTableState extends State<HumidityTable> {
 
   List<String> sensors = ['Humidity Sensor #01',];
 
-  late String? _selectedOption = null;
+  late String? _selectedOption = 'Humidity Sensor #01';
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +121,7 @@ class _HumidityTableState extends State<HumidityTable> {
                             ),
                           ),
                         ),
-                        hintText: "None",
+                        initialSelection: _selectedOption,
                         dropdownMenuEntries:
                         sensors.map<DropdownMenuEntry<String>>((sensor) {
                           return DropdownMenuEntry<String>(
