@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iot_app/api/humidity_repo.dart';
 import 'package:iot_app/appbar.dart';
 import 'package:iot_app/drawer.dart';
 
@@ -9,54 +10,28 @@ class HumidityTable extends StatefulWidget {
   State<HumidityTable> createState() => _HumidityTableState();
 }
 class _HumidityTableState extends State<HumidityTable> {
-  late List<Map<String, dynamic>> data = [
-    {
-      "id": 1,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Humidity Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "humidity": '40',
-    },
-    {
-      "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Humidity Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "humidity": '40',
-    },
-    {
-      "id": 3,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Humidity Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "humidity": '56',
-    },
-    {
-      "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Humidity Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "humidity": '76',
-    },
-    {
-      "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Humidity Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "humidity": '93',
-    },
-    {
-      "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Humidity Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "humidity": '16',
-    }
-  ];
+  late List<Map<String, dynamic>> data = [];
 
   List<String> sensors = ['Humidity Sensor #01',];
 
   late String? _selectedOption = 'Humidity Sensor #01';
+
+
+  @override
+  void initState() {
+    _loadData();
+    super.initState();
+  }
+
+  Future<void> _loadData() async {
+    dynamic humidityData = await HumidityRepo.getHumidityDataBySensorId(1);
+    print(humidityData);
+    setState(() {
+      data = List<Map<String, dynamic>>.from(humidityData);
+    });
+    _selectedOption = data[0]["sensor_name"];
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +119,7 @@ class _HumidityTableState extends State<HumidityTable> {
                 ],
               ),
             ),
-            if(_selectedOption!=null)...[SizedBox(height: 16,),
+            if(_selectedOption!=null && data.isNotEmpty)...[SizedBox(height: 16,),
             Expanded(
               child: ListView.builder(
                 itemCount: data.length,
@@ -162,7 +137,7 @@ class _HumidityTableState extends State<HumidityTable> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data[index]["sensorName"],
+                                  data[index]["sensor_name"],
                                   style: TextStyle(
                                     color: theme.colorScheme.onPrimary,
                                     fontSize: 20,
@@ -178,7 +153,7 @@ class _HumidityTableState extends State<HumidityTable> {
                                 ),
                                 SizedBox(height: 12),
                                 Text(
-                                  data[index]["dateTime"],
+                                  data[index]["date_time"],
                                   style: TextStyle(
                                     color: theme.colorScheme.secondary,
                                     fontSize: 16,
@@ -199,7 +174,7 @@ class _HumidityTableState extends State<HumidityTable> {
                                     size: 40,
                                   ),
                                   Text(
-                                    data[index]["humidity"] + "%",
+                                    data[index]["humidity"].toString() + "%",
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: theme.colorScheme.secondary,

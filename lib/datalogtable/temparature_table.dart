@@ -11,50 +11,7 @@ class TemperatureTable extends StatefulWidget {
 }
 
 class _TemperatureTableState extends State<TemperatureTable> {
-  late List<Map<String, dynamic>> data = [
-    {
-      "id": 1,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "temperature": '40',
-    },
-    {
-      "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "temperature": '40',
-    },
-    {
-      "id": 3,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "temperature": '56',
-    },
-    {
-      "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "temperature": '76',
-    },
-    {
-      "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "temperature": '93',
-    },
-    {
-      "id": 2,
-      "dateTime": '8/27/2024, 11:30:00 PM',
-      "sensorName": 'Temperature Sensor #01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "temperature": '16',
-    }
-  ];
+  late List<Map<String, dynamic>> data = [];
 
   List<String> sensors = ['Temperature Sensor #01',];
 
@@ -62,20 +19,16 @@ class _TemperatureTableState extends State<TemperatureTable> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    _loadData();
     super.initState();
   }
 
   Future<void> _loadData() async {
-    dynamic moistureData = await TemperatureRepo.getTemperatureDataBySensorId(1);
+    dynamic temperatureData = await TemperatureRepo.getTemperatureDataBySensorId(1);
     setState(() {
-      data = List<Map<String, dynamic>>.from(moistureData);
+      data = List<Map<String, dynamic>>.from(temperatureData);
     });
     _selectedOption = data[0]["sensor_name"];
-  }
-
-  void changeSensor(int id){
-
   }
 
   @override
@@ -164,7 +117,7 @@ class _TemperatureTableState extends State<TemperatureTable> {
                 ],
               ),
             ),
-            if(_selectedOption!=null)...[SizedBox(height: 16,),
+            if(_selectedOption!=null && data.isNotEmpty)...[SizedBox(height: 16,),
             Expanded(
               child: ListView.builder(
                 itemCount: data.length,
@@ -182,7 +135,7 @@ class _TemperatureTableState extends State<TemperatureTable> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data[index]["sensorName"],
+                                  data[index]["sensor_name"],
                                   style: TextStyle(
                                     color: theme.colorScheme.onPrimary,
                                     fontSize: 20,
@@ -198,7 +151,7 @@ class _TemperatureTableState extends State<TemperatureTable> {
                                 ),
                                 SizedBox(height: 12),
                                 Text(
-                                  data[index]["dateTime"],
+                                  data[index]["date_time"],
                                   style: TextStyle(
                                     color: theme.colorScheme.secondary,
                                     fontSize: 16,
@@ -219,7 +172,7 @@ class _TemperatureTableState extends State<TemperatureTable> {
                                     size: 40,
                                   ),
                                   Text(
-                                    data[index]["temperature"] + "°C",
+                                    data[index]["temperature"].toString() + "°C",
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: theme.colorScheme.secondary,

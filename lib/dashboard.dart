@@ -64,9 +64,9 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     loadJsonData();
     keys = _options.map((item) => item.keys.first).toList();
-    keys.forEach((_element)=>{
-      print(_element)
-    });
+      keys.forEach((_element)=>{
+        print(_element)
+      });
   }
 
   Future<void> loadJsonData() async {

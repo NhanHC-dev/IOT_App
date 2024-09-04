@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:iot_app/api/sensors_repo.dart';
 import 'package:iot_app/api/settings_repo.dart';
 import 'package:iot_app/appbar.dart';
 import 'package:iot_app/dashboard.dart';
 import 'package:iot_app/drawer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class Settings extends StatefulWidget {
@@ -231,7 +229,7 @@ class _SettingsState extends State<Settings> {
                 width: 210,
                 inputDecorationTheme: InputDecorationTheme(
                   constraints: BoxConstraints(
-                    maxHeight: 46
+                    maxHeight: 50
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(

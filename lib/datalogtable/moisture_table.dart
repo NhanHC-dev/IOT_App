@@ -11,50 +11,7 @@ class MoistureTable extends StatefulWidget {
 }
 
 class _MoistureTableState extends State<MoistureTable> {
-  late List<Map<String, dynamic>> data = [
-    {
-      "id": 1,
-      "date_time": '8/27/2024, 11:30:00 PM',
-      "sensor_name": 'WD-Moisture-01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "moisture": '40',
-    },
-    {
-      "id": 2,
-      "date_time": '8/27/2024, 11:30:00 PM',
-      "sensor_name": 'WD-Moisture-01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "moisture": '40',
-    },
-    {
-      "id": 3,
-      "date_time": '8/27/2024, 11:30:00 PM',
-      "sensor_name": 'WD-Moisture-01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "moisture": '56',
-    },
-    {
-      "id": 2,
-      "date_time": '8/27/2024, 11:30:00 PM',
-      "sensor_name": 'WD-Moisture-01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "moisture": '76',
-    },
-    {
-      "id": 2,
-      "date_time": '8/27/2024, 11:30:00 PM',
-      "sensor_name": 'WD-Moisture-01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "moisture": '93',
-    },
-    {
-      "id": 2,
-      "date_time": '8/27/2024, 11:30:00 PM',
-      "sensor_name": 'WD-Moisture-01',
-      "location": 'Weed Garden - 80 Le Loi, Da Nang, Viet Nam',
-      "moisture": '16',
-    }
-  ];
+  late List<Map<String, dynamic>> data = [];
 
   List<String> sensors = ['WD-Moisture-01',];
 
@@ -62,7 +19,7 @@ class _MoistureTableState extends State<MoistureTable> {
   @override
   void initState() {
     super.initState();
-    // _loadData();
+    _loadData();
   }
 
   Future<void> _loadData() async {
@@ -73,9 +30,6 @@ class _MoistureTableState extends State<MoistureTable> {
     _selectedOption = data[0]["sensor_name"];
   }
 
-  void changeSensor(int id){
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +117,7 @@ class _MoistureTableState extends State<MoistureTable> {
                 ],
               ),
             ),
-            if(_selectedOption!=null)...[SizedBox(height: 16,),
+            if(_selectedOption!=null && data.isNotEmpty)...[SizedBox(height: 16,),
             Expanded(
               child: ListView.builder(
                 itemCount: data.length,
@@ -218,7 +172,7 @@ class _MoistureTableState extends State<MoistureTable> {
                                     size: 40,
                                   ),
                                   Text(
-                                    data[index]["moisture"] + "%",
+                                    data[index]["moisture"].toString() + "%",
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: theme.colorScheme.secondary,
