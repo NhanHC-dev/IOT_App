@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:iot_app/api/sensors_repo.dart';
-import 'package:iot_app/api/settings_repo.dart';
 import 'package:iot_app/appbar.dart';
 import 'package:iot_app/dashboard.dart';
 import 'package:iot_app/drawer.dart';
@@ -74,9 +73,7 @@ class _SettingsState extends State<Settings> {
   Future<void> _loadData() async {
     // Fetch sensors and settings data from the repositories
     dynamic dataSensors = await SensorsRepo.getSensors();
-    dynamic dataSettings = await SettingsRepo.getSettingsById(1);
-
-    // Assuming the repository returns lists or maps similar to those you printed
+    dynamic dataSettings = await SensorsRepo.getSettingsById(1);
     setState(() {
       sensors = List<Map<String, dynamic>>.from(dataSensors);
       settings = Map<String, dynamic>.from(dataSettings);
@@ -101,18 +98,19 @@ class _SettingsState extends State<Settings> {
         // Create a settings map to save
         final settingsToSave = {
           'sensor_id': sensorId,
-          'max_temperature': _maxTemp,
-          'min_temperature': _minTemp,
-          'max_humidity': _maxHumidity,
-          'min_humidity': _minHumidity,
-          'max_moisture': _maxMoisture,
-          'min_moisture': _minMoisture,
+          'max_temperature': _maxTemp==null?null:_maxTemp!*100,
+          'min_temperature': _minTemp==null?null:_minTemp!*100,
+          'max_humidity': _maxHumidity==null?null:_maxHumidity!*100,
+          'min_humidity': _minHumidity==null?null:_minHumidity!*100,
+          'max_moisture': _maxMoisture==null?null:_maxMoisture!*100,
+          'min_moisture': _minMoisture==null?null:_minMoisture!*100,
+          'id': sensorId,
         };
 
         try {
           // Save the settings using the repository
-          await SettingsRepo.updateSettingsById(sensorId, settingsToSave);
-          // Show a success dialog after saving
+          final res = await SensorsRepo.updateSettingsById(sensorId, settingsToSave);
+          print(res);
           _showSaveSuccessDialog(context);
         } catch (error) {
           // Handle save error (e.g., show an error dialog or log the error)
@@ -132,7 +130,7 @@ class _SettingsState extends State<Settings> {
 
       if (selectedSensor.isNotEmpty) {
         final sensorId = selectedSensor['id'];
-        dynamic dataSettings = await SettingsRepo.getSettingsById(sensorId);
+        dynamic dataSettings = await SensorsRepo.getSettingsById(sensorId);
         setState(() {
           settings = Map<String, dynamic>.from(dataSettings);
         });
@@ -226,7 +224,7 @@ class _SettingsState extends State<Settings> {
                     _updateSliderValues();
                   });
                 },
-                width: 210,
+                width: 250,
                 inputDecorationTheme: InputDecorationTheme(
                   constraints: BoxConstraints(
                     maxHeight: 50
@@ -268,23 +266,6 @@ class _SettingsState extends State<Settings> {
               Text("Temperatures",
                   style: theme.textTheme.headlineMedium
                       ?.copyWith(color: theme.colorScheme.onPrimary)),
-              Text("Maximum",
-                  style: theme.textTheme.bodyLarge
-                      ?.copyWith(color: theme.colorScheme.onPrimary)),
-              Slider(
-                activeColor: theme.colorScheme.secondary,
-                inactiveColor: theme.colorScheme.secondary.withOpacity(0.2),
-                value: _maxTemp!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _maxTemp = newValue;
-                  });
-                },
-                min: 0.0,
-                max: 1.0,
-                divisions: 100,
-                label: (_maxTemp! * 100).toStringAsFixed(0) + '°C',
-              ),
               Text("Minimum",
                   style: theme.textTheme.bodyLarge
                       ?.copyWith(color: theme.colorScheme.onPrimary)),
@@ -302,29 +283,29 @@ class _SettingsState extends State<Settings> {
                 divisions: 100,
                 label: (_minTemp! * 100).toStringAsFixed(0) + '°C',
               ),
-              const SizedBox(height: 24),
-            ],
-            if (_maxHumidity != null) ...[
-              Text("Humidity",
-                  style: theme.textTheme.headlineMedium
-                      ?.copyWith(color: theme.colorScheme.onPrimary)),
               Text("Maximum",
                   style: theme.textTheme.bodyLarge
                       ?.copyWith(color: theme.colorScheme.onPrimary)),
               Slider(
                 activeColor: theme.colorScheme.secondary,
                 inactiveColor: theme.colorScheme.secondary.withOpacity(0.2),
-                value: _maxHumidity!,
+                value: _maxTemp!,
                 onChanged: (newValue) {
                   setState(() {
-                    _maxHumidity = newValue;
+                    _maxTemp = newValue;
                   });
                 },
                 min: 0.0,
                 max: 1.0,
                 divisions: 100,
-                label: (_maxHumidity! * 100).toStringAsFixed(0) + '%',
+                label: (_maxTemp! * 100).toStringAsFixed(0) + '°C',
               ),
+              const SizedBox(height: 24),
+            ],
+            if (_maxHumidity != null) ...[
+              Text("Humidity",
+                  style: theme.textTheme.headlineMedium
+                      ?.copyWith(color: theme.colorScheme.onPrimary)),
               Text("Minimum",
                   style: theme.textTheme.bodyLarge
                       ?.copyWith(color: theme.colorScheme.onPrimary)),
@@ -342,29 +323,29 @@ class _SettingsState extends State<Settings> {
                 divisions: 100,
                 label: (_minHumidity! * 100).toStringAsFixed(0) + '%',
               ),
-              const SizedBox(height: 24),
-            ],
-            if (_maxMoisture != null) ...[
-              Text("Moisture",
-                  style: theme.textTheme.headlineMedium
-                      ?.copyWith(color: theme.colorScheme.onPrimary)),
               Text("Maximum",
                   style: theme.textTheme.bodyLarge
                       ?.copyWith(color: theme.colorScheme.onPrimary)),
               Slider(
                 activeColor: theme.colorScheme.secondary,
                 inactiveColor: theme.colorScheme.secondary.withOpacity(0.2),
-                value: _maxMoisture!,
+                value: _maxHumidity!,
                 onChanged: (newValue) {
                   setState(() {
-                    _maxMoisture = newValue;
+                    _maxHumidity = newValue;
                   });
                 },
                 min: 0.0,
                 max: 1.0,
                 divisions: 100,
-                label: (_maxMoisture! * 100).toStringAsFixed(0) + '%',
+                label: (_maxHumidity! * 100).toStringAsFixed(0) + '%',
               ),
+              const SizedBox(height: 24),
+            ],
+            if (_maxMoisture != null) ...[
+              Text("Moisture",
+                  style: theme.textTheme.headlineMedium
+                      ?.copyWith(color: theme.colorScheme.onPrimary)),
               Text("Minimum",
                   style: theme.textTheme.bodyLarge
                       ?.copyWith(color: theme.colorScheme.onPrimary)),
@@ -381,6 +362,23 @@ class _SettingsState extends State<Settings> {
                 max: 1.0,
                 divisions: 100,
                 label: (_minMoisture! * 100).toStringAsFixed(0) + '%',
+              ),
+              Text("Maximum",
+                  style: theme.textTheme.bodyLarge
+                      ?.copyWith(color: theme.colorScheme.onPrimary)),
+              Slider(
+                activeColor: theme.colorScheme.secondary,
+                inactiveColor: theme.colorScheme.secondary.withOpacity(0.2),
+                value: _maxMoisture!,
+                onChanged: (newValue) {
+                  setState(() {
+                    _maxMoisture = newValue;
+                  });
+                },
+                min: 0.0,
+                max: 1.0,
+                divisions: 100,
+                label: (_maxMoisture! * 100).toStringAsFixed(0) + '%',
               ),
               const SizedBox(height: 24),
             ],
