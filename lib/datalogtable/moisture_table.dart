@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:iot_app/api/moisture_repo.dart';
 import 'package:iot_app/appbar.dart';
 import 'package:iot_app/drawer.dart';
@@ -26,8 +27,20 @@ class _MoistureTableState extends State<MoistureTable> {
     dynamic moistureData = await MoistureRepo.getMoistureDataBySensorId(2);
     setState(() {
       data = List<Map<String, dynamic>>.from(moistureData);
+      _selectedOption = data[0]["sensor_name"];
     });
-    _selectedOption = data[0]["sensor_name"];
+  }
+
+
+  String formatDate(String originalDate){
+    DateTime dateTime = DateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'", 'en_US').parse(originalDate, true);
+
+    // Convert to desired time zone (UTC+7)
+    DateTime dateTimeInUTC7 = dateTime.toUtc().add(Duration(hours: 7));
+
+    // Format the date to your desired format
+    String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTimeInUTC7);
+    return formattedDate;
   }
 
 
@@ -151,7 +164,7 @@ class _MoistureTableState extends State<MoistureTable> {
                                 ),
                                 SizedBox(height: 12),
                                 Text(
-                                  data[index]["date_time"],
+                                  formatDate(data[index]["date_time"]),
                                   style: TextStyle(
                                     color: theme.colorScheme.secondary,
                                     fontSize: 16,

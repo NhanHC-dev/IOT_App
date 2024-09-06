@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:iot_app/api/sensors_repo.dart';
+import 'package:iot_app/api/temperature_repo.dart';
 import 'package:iot_app/charts/legend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
@@ -18,18 +20,15 @@ class _TempChartState extends State<TempChart> {
   late List<Map<String, dynamic>> data = [];
   final Random random = Random();
 
-  Future<void> getTemperatureFromDevice() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> getTemperature() async {
+    final response = await SensorsRepo.getSettingsById(1);
 
-    // Retrieve stored values or set default values if not available
-    double minTemp =
-        prefs.getDouble('minTemp') ?? 3.0; // Default min temperature 3°C
-    double maxTemp =
-        prefs.getDouble('maxTemp') ?? 37.0; // Default max temperature 37°C
+    double minTemp = response["min_temperature"];
+    double maxTemp = response["max_temperature"];
 
     setState(() {
-      _minTemp = minTemp * 100; // Convert to range used in Slider
-      _maxTemp = maxTemp * 100; // Convert to range used in Slider
+      _minTemp = minTemp; // Convert to range used in Slider
+      _maxTemp = maxTemp; // Convert to range used in Slider
     });
   }
 
@@ -37,7 +36,7 @@ class _TempChartState extends State<TempChart> {
     for (int i = 8; i <= 20; i++) {
       String time = i.toString().padLeft(2, '0') + ':00';
       int value =
-          20 + random.nextInt(20); // Generates a number between 20 and 39
+          26 + random.nextInt(6); // Generates a number between 20 and 39
       data.add({
         'x': time,
         'y': value,
@@ -75,7 +74,7 @@ class _TempChartState extends State<TempChart> {
   @override
   void initState() {
     super.initState();
-    getTemperatureFromDevice();
+    getTemperature();
     getData();
   }
 

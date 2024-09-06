@@ -17,7 +17,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  List<double> temperatureData = [];
+  List<dynamic> temperatureData = [];
   List<dynamic> humidityData = [];
   List<dynamic> filteredTemperatureData = [];
   List<dynamic> filteredHumidityData = [];
@@ -62,22 +62,12 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    loadJsonData();
     keys = _options.map((item) => item.keys.first).toList();
       keys.forEach((_element)=>{
         print(_element)
       });
   }
 
-  Future<void> loadJsonData() async {
-    final String response = await rootBundle.loadString('assets/data.json');
-    final data = await json.decode(response);
-
-    setState(() {
-      temperatureData = List<double>.from(data['temperature']);
-      humidityData = data['humidity'];
-    });
-  }
 
   void changeData() {
     // Find the selected option in the _options list

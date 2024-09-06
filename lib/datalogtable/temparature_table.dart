@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:iot_app/api/temperature_repo.dart';
 import 'package:iot_app/appbar.dart';
 import 'package:iot_app/drawer.dart';
@@ -13,9 +14,9 @@ class TemperatureTable extends StatefulWidget {
 class _TemperatureTableState extends State<TemperatureTable> {
   late List<Map<String, dynamic>> data = [];
 
-  List<String> sensors = ['Temperature Sensor #01',];
+  List<String> sensors = ['WD-Temperature-01',];
 
-  late String? _selectedOption = 'Temperature Sensor #01';
+  late String? _selectedOption = 'WD-Temperature-01';
 
   @override
   void initState() {
@@ -27,8 +28,19 @@ class _TemperatureTableState extends State<TemperatureTable> {
     dynamic temperatureData = await TemperatureRepo.getTemperatureDataBySensorId(1);
     setState(() {
       data = List<Map<String, dynamic>>.from(temperatureData);
+      _selectedOption = data[0]["sensor_name"];
     });
-    _selectedOption = data[0]["sensor_name"];
+  }
+
+  String formatDate(String originalDate){
+    DateTime dateTime = DateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'", 'en_US').parse(originalDate, true);
+
+    // Convert to desired time zone (UTC+7)
+    DateTime dateTimeInUTC7 = dateTime.toUtc().add(Duration(hours: 7));
+
+    // Format the date to your desired format
+    String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTimeInUTC7);
+    return formattedDate;
   }
 
   @override
@@ -151,7 +163,7 @@ class _TemperatureTableState extends State<TemperatureTable> {
                                 ),
                                 SizedBox(height: 12),
                                 Text(
-                                  data[index]["date_time"],
+                                  formatDate(data[index]["date_time"]),
                                   style: TextStyle(
                                     color: theme.colorScheme.secondary,
                                     fontSize: 16,

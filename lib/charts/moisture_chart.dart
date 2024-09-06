@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:iot_app/api/sensors_repo.dart';
 import 'package:iot_app/charts/legend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,18 +20,15 @@ class _MoistureChartState extends State<MoistureChart> {
   late List<Map<String, dynamic>> data = [];
   final Random random = Random();
 
-  Future<void> getTemperatureFromDevice() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> getMoisture() async {
+    final response = await SensorsRepo.getSettingsById(2);
 
-    // Retrieve stored values or set default values if not available
-    double minMoisture =
-        prefs.getDouble('minMoisture') ?? 3.0; // Default min temperature 3°C
-    double maxMoisture =
-        prefs.getDouble('maxMoisture') ?? 37.0; // Default max temperature 37°C
+    double minTemp = response["min_moisture"];
+    double maxTemp = response["max_moisture"];
 
     setState(() {
-      _minMoisture = minMoisture * 100; // Convert to range used in Slider
-      _maxMoisture = maxMoisture * 100; // Convert to range used in Slider
+      _minMoisture = minTemp; // Convert to range used in Slider
+      _maxMoisture = maxTemp; // Convert to range used in Slider
     });
   }
 
@@ -38,7 +36,7 @@ class _MoistureChartState extends State<MoistureChart> {
     for (int i = 8; i <= 20; i++) {
       String time = i.toString().padLeft(2, '0') + ':00';
       int value =
-          20 + random.nextInt(20); // Generates a number between 20 and 39
+          54 + random.nextInt(6); // Generates a number between 20 and 39
       data.add({
         'x': time,
         'y': value,
@@ -76,7 +74,7 @@ class _MoistureChartState extends State<MoistureChart> {
   @override
   void initState() {
     super.initState();
-    getTemperatureFromDevice();
+    getMoisture();
     getData();
   }
 

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:iot_app/api/sensors_repo.dart';
 import 'package:iot_app/charts/legend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,18 +20,15 @@ class _HumidityChartState extends State<HumidityChart> {
   late List<Map<String, dynamic>> data = [];
   final Random random = Random();
 
-  Future<void> getTemperatureFromDevice() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> getHumidity() async {
+    final response = await SensorsRepo.getSettingsById(1);
 
-    // Retrieve stored values or set default values if not available
-    double minHumidity =
-        prefs.getDouble('minHumidity') ?? 3.0; // Default min temperature 3°C
-    double maxHumidity =
-        prefs.getDouble('maxHumidity') ?? 37.0; // Default max temperature 37°C
+    double minTemp = response["min_humidity"];
+    double maxTemp = response["max_humidity"];
 
     setState(() {
-      _minHumidity = minHumidity * 100; // Convert to range used in Slider
-      _maxHumidity = maxHumidity * 100; // Convert to range used in Slider
+      _minHumidity = minTemp; // Convert to range used in Slider
+      _maxHumidity = maxTemp; // Convert to range used in Slider
     });
   }
 
@@ -38,7 +36,7 @@ class _HumidityChartState extends State<HumidityChart> {
     for (int i = 8; i <= 20; i++) {
       String time = i.toString().padLeft(2, '0') + ':00';
       int value =
-          20 + random.nextInt(20); // Generates a number between 20 and 39
+          45 + random.nextInt(6); // Generates a number between 20 and 39
       data.add({
         'x': time,
         'y': value,
@@ -76,7 +74,7 @@ class _HumidityChartState extends State<HumidityChart> {
   @override
   void initState() {
     super.initState();
-    getTemperatureFromDevice();
+    getHumidity();
     getData();
   }
 
