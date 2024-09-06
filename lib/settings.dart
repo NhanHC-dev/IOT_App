@@ -227,8 +227,9 @@ class _SettingsState extends State<Settings> {
                 width: 250,
                 inputDecorationTheme: InputDecorationTheme(
                   constraints: BoxConstraints(
-                    maxHeight: 50
+                    maxHeight: 46
                   ),
+                  contentPadding: EdgeInsets.all(0),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.transparent,
