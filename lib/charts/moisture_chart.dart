@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:iot_app/api/moisture_repo.dart';
 import 'package:iot_app/api/sensors_repo.dart';
 import 'package:iot_app/charts/legend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,59 +15,62 @@ class MoistureChart extends StatefulWidget {
 }
 
 class _MoistureChartState extends State<MoistureChart> {
-  late double _minMoisture = 3.0;
-  late double _maxMoisture = 37.0;
 
   late List<Map<String, dynamic>> data = [];
-  final Random random = Random();
+  late Map<String,dynamic> moisture = {};
+  late Map<String,dynamic> minimum = {};
+  late Map<String,dynamic> maximum = {};
+
 
   Future<void> getMoisture() async {
-    final response = await SensorsRepo.getSettingsById(2);
-
-    double minTemp = response["min_moisture"];
-    double maxTemp = response["max_moisture"];
-
+    List<dynamic> res = await MoistureRepo.getMoistureChart(2);
     setState(() {
-      _minMoisture = minTemp; // Convert to range used in Slider
-      _maxMoisture = maxTemp; // Convert to range used in Slider
+      moisture = res.firstWhere((element) => element["id"]=="Moisture");
+      minimum = res.firstWhere((element) => element["id"]=="Minimum");
+      maximum = res.firstWhere((element) => element["id"]=="Maximum");
     });
-  }
 
-  void getData() {
-    for (int i = 8; i <= 20; i++) {
-      String time = i.toString().padLeft(2, '0') + ':00';
-      int value =
-          54 + random.nextInt(6); // Generates a number between 20 and 39
-      data.add({
-        'x': time,
-        'y': value,
-      });
-    }
   }
 
   List<FlSpot> generateSpots() {
-    return data.map((el) {
-      int x =
-      int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
-      double y = el['y'].toDouble(); // Ensure y is double
+    var data = moisture["data"];
+    if (data == null || data is! List<dynamic>) {
+      return [];
+    }
+
+    return data.whereType<Map<String, dynamic>>().map<FlSpot>((el) {
+      // Calculate x as total minutes from "HH:MM"
+      List<String> timeParts = el['x'].toString().split(':');
+      int x = int.parse(timeParts[0]) * 60 + int.parse(timeParts[1]); // Total minutes
+      double y = el['y'].toDouble();
       return FlSpot(x.toDouble(), y);
     }).toList();
   }
 
   List<FlSpot> generateMaxSpots() {
-    return data.map((el) {
-      int x =
-      int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
-      double y = _maxMoisture; // Ensure y is double
+    var data = maximum["data"];
+    if (data == null || data is! List<dynamic>) {
+      return [];
+    }
+
+    return data.whereType<Map<String, dynamic>>().map<FlSpot>((el) {
+      List<String> timeParts = el['x'].toString().split(':');
+      int x = int.parse(timeParts[0]) * 60 + int.parse(timeParts[1]); // Total minutes
+      double y = el['y'].toDouble();
       return FlSpot(x.toDouble(), y);
     }).toList();
   }
 
   List<FlSpot> generateMinSpots() {
-    return data.map((el) {
-      int x =
-      int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
-      double y = _minMoisture; // Ensure y is double
+    var data = minimum["data"];
+    if (data == null || data is! List<dynamic>) {
+      return [];
+    }
+
+    return data.whereType<Map<String, dynamic>>().map<FlSpot>((el) {
+      List<String> timeParts = el['x'].toString().split(':');
+      int x = int.parse(timeParts[0]) * 60 + int.parse(timeParts[1]); // Total minutes
+      double y = el['y'].toDouble();
       return FlSpot(x.toDouble(), y);
     }).toList();
   }
@@ -75,7 +79,6 @@ class _MoistureChartState extends State<MoistureChart> {
   void initState() {
     super.initState();
     getMoisture();
-    getData();
   }
 
   @override
@@ -124,8 +127,13 @@ class _MoistureChartState extends State<MoistureChart> {
                           showTitles: true,
                           reservedSize: 40,
                           getTitlesWidget: (value, meta) {
+                            // Convert minutes to HH:MM format for display
+                            int totalMinutes = value.toInt();
+                            int hours = totalMinutes ~/ 60;
+                            int minutes = totalMinutes % 60;
+                            String formattedTime = '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
                             return Text(
-                              '${value.toInt()}',
+                              formattedTime,
                               style: TextStyle(color: theme.colorScheme.onPrimary),
                             );
                           },
@@ -160,7 +168,7 @@ class _MoistureChartState extends State<MoistureChart> {
                       LineChartBarData(
                         spots: generateMinSpots(),
                         isCurved: false,
-                        color: Color.fromARGB(255, 81, 91, 193), // Darker color variant
+                        color: Color.fromARGB(255, 81, 91, 193),
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -168,7 +176,7 @@ class _MoistureChartState extends State<MoistureChart> {
                       LineChartBarData(
                         spots: generateMaxSpots(),
                         isCurved: false,
-                        color: theme.colorScheme.error, // Use the error color for red
+                        color: theme.colorScheme.error,
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:iot_app/api/sensors_repo.dart';
 import 'package:iot_app/api/temperature_repo.dart';
 import 'package:iot_app/charts/legend.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math';
 
 class TempChart extends StatefulWidget {
   const TempChart({super.key});
@@ -14,68 +11,72 @@ class TempChart extends StatefulWidget {
 }
 
 class _TempChartState extends State<TempChart> {
-  late double _minTemp = 3.0;
-  late double _maxTemp = 37.0;
 
   late List<Map<String, dynamic>> data = [];
-  final Random random = Random();
+  late Map<String,dynamic> temperature = {};
+  late Map<String,dynamic> minimum = {};
+  late Map<String,dynamic> maximum = {};
+
 
   Future<void> getTemperature() async {
-    final response = await SensorsRepo.getSettingsById(1);
-
-    double minTemp = response["min_temperature"];
-    double maxTemp = response["max_temperature"];
-
+    List<dynamic> res = await TemperatureRepo.getTemperatureChart(1);
     setState(() {
-      _minTemp = minTemp; // Convert to range used in Slider
-      _maxTemp = maxTemp; // Convert to range used in Slider
+      temperature = res.firstWhere((element) => element["id"]=="Temperature");
+      minimum = res.firstWhere((element) => element["id"]=="Minimum");
+      maximum = res.firstWhere((element) => element["id"]=="Maximum");
     });
-  }
 
-  void getData() {
-    for (int i = 8; i <= 20; i++) {
-      String time = i.toString().padLeft(2, '0') + ':00';
-      int value =
-          26 + random.nextInt(6); // Generates a number between 20 and 39
-      data.add({
-        'x': time,
-        'y': value,
-      });
-    }
   }
 
   List<FlSpot> generateSpots() {
-    return data.map((el) {
-      int x =
-      int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
-      double y = el['y'].toDouble(); // Ensure y is double
+    var data = temperature["data"];
+    if (data == null || data is! List<dynamic>) {
+      return [];
+    }
+
+    return data.whereType<Map<String, dynamic>>().map<FlSpot>((el) {
+      // Calculate x as total minutes from "HH:MM"
+      List<String> timeParts = el['x'].toString().split(':');
+      int x = int.parse(timeParts[0]) * 60 + int.parse(timeParts[1]); // Total minutes
+      double y = el['y'].toDouble();
       return FlSpot(x.toDouble(), y);
     }).toList();
   }
 
   List<FlSpot> generateMaxSpots() {
-    return data.map((el) {
-      int x =
-      int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
-      double y = _maxTemp; // Ensure y is double
+    var data = maximum["data"];
+    if (data == null || data is! List<dynamic>) {
+      return [];
+    }
+
+    return data.whereType<Map<String, dynamic>>().map<FlSpot>((el) {
+      List<String> timeParts = el['x'].toString().split(':');
+      int x = int.parse(timeParts[0]) * 60 + int.parse(timeParts[1]); // Total minutes
+      double y = el['y'].toDouble();
       return FlSpot(x.toDouble(), y);
     }).toList();
   }
 
   List<FlSpot> generateMinSpots() {
-    return data.map((el) {
-      int x =
-      int.parse(el['x'].toString().split(':')[0]); // Extract hour as int
-      double y = _minTemp; // Ensure y is double
+    var data = minimum["data"];
+    if (data == null || data is! List<dynamic>) {
+      return [];
+    }
+
+    return data.whereType<Map<String, dynamic>>().map<FlSpot>((el) {
+      List<String> timeParts = el['x'].toString().split(':');
+      int x = int.parse(timeParts[0]) * 60 + int.parse(timeParts[1]); // Total minutes
+      double y = el['y'].toDouble();
       return FlSpot(x.toDouble(), y);
     }).toList();
   }
+
+
 
   @override
   void initState() {
     super.initState();
     getTemperature();
-    getData();
   }
 
   @override
@@ -114,8 +115,7 @@ class _TempChartState extends State<TempChart> {
                           getTitlesWidget: (value, meta) {
                             return Text(
                               value.toInt().toString(),
-                              style:
-                              TextStyle(color: theme.colorScheme.onPrimary),
+                              style: TextStyle(color: theme.colorScheme.onPrimary),
                             );
                           },
                         ),
@@ -125,10 +125,14 @@ class _TempChartState extends State<TempChart> {
                           showTitles: true,
                           reservedSize: 40,
                           getTitlesWidget: (value, meta) {
+                            // Convert minutes to HH:MM format for display
+                            int totalMinutes = value.toInt();
+                            int hours = totalMinutes ~/ 60;
+                            int minutes = totalMinutes % 60;
+                            String formattedTime = '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
                             return Text(
-                              '${value.toInt()}',
-                              style:
-                              TextStyle(color: theme.colorScheme.onPrimary),
+                              formattedTime,
+                              style: TextStyle(color: theme.colorScheme.onPrimary),
                             );
                           },
                         ),
@@ -163,7 +167,6 @@ class _TempChartState extends State<TempChart> {
                         spots: generateMinSpots(),
                         isCurved: false,
                         color: Color.fromARGB(255, 81, 91, 193),
-                        // Darker color variant
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),
@@ -172,7 +175,6 @@ class _TempChartState extends State<TempChart> {
                         spots: generateMaxSpots(),
                         isCurved: false,
                         color: theme.colorScheme.error,
-                        // Use the error color for red
                         barWidth: 2,
                         belowBarData: BarAreaData(show: false),
                         dotData: FlDotData(show: true),

@@ -24,7 +24,7 @@ class _MoistureTableState extends State<MoistureTable> {
   }
 
   Future<void> _loadData() async {
-    dynamic moistureData = await MoistureRepo.getMoistureDataBySensorId(2);
+    dynamic moistureData = await MoistureRepo.getMoistureTable(2);
     setState(() {
       data = List<Map<String, dynamic>>.from(moistureData);
       _selectedOption = data[0]["sensor_name"];

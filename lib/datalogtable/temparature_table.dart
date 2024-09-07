@@ -25,7 +25,7 @@ class _TemperatureTableState extends State<TemperatureTable> {
   }
 
   Future<void> _loadData() async {
-    dynamic temperatureData = await TemperatureRepo.getTemperatureDataBySensorId(1);
+    dynamic temperatureData = await TemperatureRepo.getTemperatureTable(1);
     setState(() {
       data = List<Map<String, dynamic>>.from(temperatureData);
       _selectedOption = data[0]["sensor_name"];

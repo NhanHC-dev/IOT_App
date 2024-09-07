@@ -25,7 +25,7 @@ class _HumidityTableState extends State<HumidityTable> {
   }
 
   Future<void> _loadData() async {
-    dynamic humidityData = await HumidityRepo.getHumidityDataBySensorId(1);
+    dynamic humidityData = await HumidityRepo.getHumidityTable(1);
     setState(() {
       data = List<Map<String, dynamic>>.from(humidityData);
       _selectedOption = data[0]["sensor_name"];
